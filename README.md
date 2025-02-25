@@ -1,4 +1,4 @@
-A minimalist developer portfolio built using https://portfoilio-generator.netlify.app
+A minimalist developer portfolio built using https://github.com/yashrajnayak/portfolio-generator
 
 ## Features
 
