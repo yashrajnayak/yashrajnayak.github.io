@@ -1,11 +1,30 @@
 // Load and parse config
 async function loadConfig() {
     try {
-        const response = await fetch('config.yml');
+        // Check if js-yaml is available
+        if (typeof jsyaml === 'undefined') {
+            throw new Error('js-yaml library not loaded. Please check your internet connection and refresh the page.');
+        }
+
+        const response = await fetch('./config.yml');
+        if (!response.ok) {
+            throw new Error(`Failed to load config: ${response.status} ${response.statusText}`);
+        }
         const yamlText = await response.text();
-        return jsyaml.load(yamlText);
+        const config = jsyaml.load(yamlText);
+        if (!config) {
+            throw new Error('Failed to parse config file - empty or invalid YAML');
+        }
+        console.log('Config loaded successfully:', config);
+        return config;
     } catch (error) {
         console.error('Error loading config:', error);
+        document.body.innerHTML = `
+            <div style="color: red; padding: 20px; text-align: center;">
+                <h1>Error Loading Configuration</h1>
+                <p>${error.message}</p>
+                <p>If the problem persists, please check your config.yml file format.</p>
+            </div>`;
         return null;
     }
 }

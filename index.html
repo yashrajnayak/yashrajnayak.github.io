@@ -7,7 +7,8 @@
     <title></title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='12' cy='12' r='10'/><line x1='2' y1='12' x2='22' y2='12'/><path d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z'/></svg>">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js" integrity="sha512-CSBhVREyzHAjAFfBlIBz3TBhJzGZlKv8+GSzDC3yVDxCXI/GDAUuVPGBJE1WzPq3fp7a2QPSPUnkJAJv9eoAQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Load js-yaml before main script -->
+    <script src="assets/js/js-yaml.min.js"></script>
 </head>
 <body>
     <!-- Theme switcher -->
@@ -95,6 +96,19 @@
         </section>
     </div>
     
+    <script>
+        // Verify js-yaml loaded correctly
+        window.addEventListener('load', function() {
+            if (typeof jsyaml === 'undefined') {
+                document.body.innerHTML = `
+                    <div style="color: red; padding: 20px; text-align: center;">
+                        <h1>Error Loading Dependencies</h1>
+                        <p>Failed to load js-yaml library. Please try refreshing the page.</p>
+                        <p>If the problem persists, please contact the administrator.</p>
+                    </div>`;
+            }
+        });
+    </script>
     <script src="scripts.js"></script>
 
     <!-- Social Icons Templates -->

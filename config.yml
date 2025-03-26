@@ -5,7 +5,7 @@ site:
 
 # Header Section
 header:
-  greeting: "Hi, I'm Yashraj Nayak 👋"
+  greeting: "Yashraj Nayak"
   tagline: "Developer and People Person."
 
 # Social Links
@@ -15,8 +15,8 @@ linkedin_url: "https://www.linkedin.com/in/yashrajnayak/"
 # About Section
 about:
   paragraphs:
-    - "Program Manager at GitHub Developer Relations, where I help spark creativity and excitement around GitHub while finding new ways to connect with developers worldwide."
-    - "My community journey began as a Microsoft Student Partner during university, where I proudly represented India at a worldwide summit at Microsoft HQ. Over the years, I've built and scaled developer communities that have reached hundreds of thousands of tech enthusiasts."
+    - "Currently working as Program Manager at GitHub Developer Relations, where I help spark creativity and excitement around GitHub while finding new ways to connect with developers worldwide."
+    - "My community journey began as a Microsoft Student Partner during university, where I proudly represented India at a worldwide summit at Microsoft HQ. Over the past 8 years, I've built and scaled developer communities that have reached hundreds of thousands of tech enthusiasts."
 
 # Experience Section
 experience:
@@ -26,8 +26,8 @@ experience:
       role: "Program Manager, Developer Relations"
       date: "Mar 2024 - Present"
       responsibilities:
-        - "Leading planning and execution of Constellation 2024, GitHub's developer conference in India"
-        - "Growing key programs like the Global Meetups Program and premier events (GitHub Universe Recap, GitHub Connect India)"
+        - "Led planning and execution of Constellation 2024, GitHub's developer conference in India"
+        - "Growing key programs like the Global Meetups Program and premier events (GitHub Universe Recap, GitHub Connect)"
         - "Scaling the GitTogethers program across India with monthly developer meetups in major cities"
         - "Representing developer voices internally to improve the GitHub ecosystem"
       logo:
