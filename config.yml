@@ -1,0 +1,90 @@
+# Site Configuration
+site:
+  title: "Yashraj Nayak - Developer Portfolio"
+  description: "Developer Portfolio - Yashraj Nayak"
+
+# Header Section
+header:
+  greeting: "Hi, I'm Yashraj Nayak 👋"
+  tagline: "Developer and People Person."
+
+# Social Links
+github: "yashrajnayak"
+linkedin_url: "https://www.linkedin.com/in/yashrajnayak/"
+
+# About Section
+about:
+  paragraphs:
+    - "Program Manager at GitHub Developer Relations, where I help spark creativity and excitement around GitHub while finding new ways to connect with developers worldwide."
+    - "My community journey began as a Microsoft Student Partner during university, where I proudly represented India at a worldwide summit at Microsoft HQ. Over the years, I've built and scaled developer communities that have reached hundreds of thousands of tech enthusiasts."
+
+# Experience Section
+experience:
+  title: "Professional Experience"
+  jobs:
+    - company: "GitHub"
+      role: "Program Manager, Developer Relations"
+      date: "Mar 2024 - Present"
+      responsibilities:
+        - "Leading planning and execution of Constellation 2024, GitHub's developer conference in India"
+        - "Growing key programs like the Global Meetups Program and premier events (GitHub Universe Recap, GitHub Connect India)"
+        - "Scaling the GitTogethers program across India with monthly developer meetups in major cities"
+        - "Representing developer voices internally to improve the GitHub ecosystem"
+      logo:
+        light: "assets/GitHub_Logo.png"
+        dark: "assets/GitHub_Logo_White.png"
+
+    - company: "ANSR"
+      role: "Senior Community Manager"
+      date: "Mar 2023 - Feb 2024"
+      responsibilities:
+        - "Built community programs from scratch, reaching 6,000+ active developers in 8 months"
+        - "Hosted 20 successful tech events with 3,000+ attendees (ReactJS Meetups, Women in Tech events)"
+        - "Advocated for community needs within the GCC ecosystem"
+      logo:
+        light: "assets/ANSR_Logo.png"
+        dark: "assets/ANSR_Logo_White.png"
+
+    - company: "OutSystems"
+      role: "APAC Community Growth Manager"
+      date: "Mar 2021 - Feb 2023"
+      responsibilities:
+        - "Expanded global community programs throughout Asia-Pacific"
+        - "Led initiatives like #14DaysOfOutSystems Challenge and OutSystems Student Accelerator"
+        - "Supported user group organizers across APAC to build strong local communities"
+      logo:
+        light: "assets/OutSystems_Logo.png"
+        dark: "assets/OutSystems_Logo_White.png"
+
+    - company: "Progate"
+      role: "India Community Manager"
+      date: "Jun 2018 - Feb 2021"
+      responsibilities:
+        - "Managed India community of 200,000+ learners at this Japanese coding platform"
+        - "Established Community Partnership with Hacktoberfest 2020"
+        - "Organized 30+ Learning Jams across major Indian cities"
+        - "Reached 6,000+ high school students through Hour of Code™ 2018 Campaign"
+      logo:
+        light: "assets/Progate_Logo.png"
+        dark: "assets/Progate_Logo_White.png"
+
+# Skills Section
+skills:
+  title: "Skills & Technologies"
+  categories:
+    - name: "Developer Relations"
+      items:
+        - "Program Management"
+        - "Developer Engagement"
+        - "Developer Advocacy"
+    - name: "Technical"
+      items:
+        - "JavaScript"
+        - "React"
+        - "Microsoft Azure"
+        - "GitHub Actions"
+        - "Low-Code Development"
+    - name: "Languages"
+      items:
+        - "English"
+        - "Hindi"
