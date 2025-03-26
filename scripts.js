@@ -25,7 +25,7 @@ async function fetchGitHubProjects() {
     const username = 'yashrajnayak';
     
     try {
-        const response = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`);
+        const response = await fetch(`https://api.github.com/users/${username}/repos?sort=created&direction=desc&per_page=100`);
         
         if (!response.ok) {
             throw new Error('Failed to fetch projects');
@@ -33,8 +33,8 @@ async function fetchGitHubProjects() {
         
         const allRepos = await response.json();
         
-        // Sort by stars (most stars first) and take the first 6
-        const repos = allRepos.sort((a, b) => b.stargazers_count - a.stargazers_count).slice(0, 6);
+        // Take the first 6 repositories (already sorted by creation date)
+        const repos = allRepos.slice(0, 6);
         
         // Clear loading message
         projectsContainer.innerHTML = '';
