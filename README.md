@@ -74,6 +74,10 @@ skills:
       items:
         - "Skill 1"
         - "Skill 2"
+    - name: "Certifications"
+      items:
+        - name: "Certification Name"
+          url: "https://certification-url.com"
 ```
 
 ### Important Notes
@@ -90,14 +94,19 @@ skills:
    - Recommended format: PNG with transparent background
    - Naming convention: `CompanyName_Logo.png` and `CompanyName_Logo_White.png`
 
-3. **Assets Structure**:
+3. **Certifications**:
+   - Add certifications using the object format with `name` and `url` properties
+   - They will appear as underlined links with the same color as normal text
+   - Example: `{ name: "Certification Name", url: "https://certification-url.com" }`
+
+4. **Assets Structure**:
    ```
    assets/
    ├── CompanyName_Logo.png      # Light mode logo
    └── CompanyName_Logo_White.png # Dark mode logo
    ```
 
-4. **Projects Section**:
+5. **Projects Section**:
    - Automatically fetches and displays your 6 most recent GitHub repositories
    - Excludes your portfolio repository
    - Shows repository descriptions and links

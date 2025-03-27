@@ -26,9 +26,9 @@ experience:
       role: "Program Manager, Developer Relations"
       date: "Mar 2024 - Present"
       responsibilities:
-        - "End-to-end execution of Constellation 2024, GitHub's developer conference with 900+ in-person attendees in Bengaluru, India"
+        - "End-to-end execution of GitHub Constellation 2024, 900+ developer conference in Bengaluru, India"
         - "Growing key programs like the Global Meetups Program and 1st party events such as GitHub Universe Recap and GitHub Connect India"
-        - "Scaling GitTogethers in India, developer meetups led by local community experts and powered by GitHub. Hosting 4 premier developer meetups every month in Bengaluru, Delhi NCR, Hyderabad, and Mumbai since July 2024. Featured over 90 speakers and engaged more than 2,000 of India's most active developers, bringing them closer to the GitHub ecosystem"
+        - "Scaling GitTogethers in India, developer meetups led by local community experts and powered by GitHub. Hosting 4 premier developer meetups every month in Bengaluru, Delhi NCR, Hyderabad, and Mumbai. Featured over 90 speakers and engaged more than 2,000 of India's most active developers, bringing them closer to the GitHub ecosystem"
       logo:
         light: "assets/GitHub_Logo.png"
         dark: "assets/GitHub_Logo_White.png"
@@ -71,7 +71,7 @@ experience:
       role: "Community Manager"
       date: "Aug 2017 - Feb 2018"
       responsibilities:
-        - "Worked alongside teams from DigitalOcean, AWS, Digital Domain, Société Générale, etc to plan and execute various developer events across the country (both online and offline)"
+        - "Worked alongside teams from DigitalOcean, AWS, Digital Domain, Société Générale, etc to plan and execute developer events across the country (both online and offline)"
         - "Helped in the execution of Hack2Innovate 2017, series of 7 deep-tech hackathons while working with teams from T-Hub, Microsoft, NVIDIA and PwC"
         - "Handled Skillenza's student developer engagement and supported 25+ hackathons in different campuses across the country"
       logo:
@@ -84,10 +84,9 @@ skills:
   categories:
     - name: "Technical"
       items:
-        - "C#"
         - "JavaScript"
+        - "C#"
         - "React"
-        - "GitHub Copilot"
         - "GitHub Actions"
         - "Microsoft Azure"        
         - "Low-Code Development"
