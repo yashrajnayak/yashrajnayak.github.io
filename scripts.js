@@ -102,22 +102,31 @@ function updatePageContent(config) {
     // Update experience section
     const experienceSection = document.querySelector('.experience');
     experienceSection.querySelector('h2').textContent = config.experience.title;
-    const experienceItems = experienceSection.querySelectorAll('.experience-item');
     
-    experienceItems.forEach((item, index) => {
-        const job = config.experience.jobs[index];
-        if (!job) return;
-
-        const content = item.querySelector('.experience-content');
-        content.querySelector('h3').textContent = `${job.company} | ${job.role}`;
-        content.querySelector('.date').textContent = job.date;
-        content.querySelector('ul').innerHTML = job.responsibilities
-            .map(resp => `<li>${resp}</li>`)
-            .join('');
-
-        const logo = item.querySelector('.company-logo');
-        logo.querySelector('.light-mode-logo').src = job.logo.light;
-        logo.querySelector('.dark-mode-logo').src = job.logo.dark;
+    // Clear any existing experience items
+    const existingItems = experienceSection.querySelectorAll('.experience-item');
+    existingItems.forEach(item => item.remove());
+    
+    // Dynamically generate experience items from config
+    config.experience.jobs.forEach(job => {
+        const experienceItem = document.createElement('div');
+        experienceItem.className = 'experience-item';
+        
+        experienceItem.innerHTML = `
+            <div class="experience-content">
+                <h3>${job.company} | ${job.role}</h3>
+                <p class="date">${job.date}</p>
+                <ul>
+                    ${job.responsibilities.map(resp => `<li>${resp}</li>`).join('')}
+                </ul>
+            </div>
+            <div class="company-logo">
+                <img src="${job.logo.light}" alt="${job.company} logo" class="light-mode-logo">
+                <img src="${job.logo.dark}" alt="${job.company} logo" class="dark-mode-logo">
+            </div>
+        `;
+        
+        experienceSection.appendChild(experienceItem);
     });
 
     // Update skills section
@@ -128,7 +137,15 @@ function updatePageContent(config) {
         <div class="skill-category">
             <h3>${category.name}</h3>
             <ul>
-                ${category.items.map(item => `<li>${item}</li>`).join('')}
+                ${category.items.map(item => {
+                    // Check if item is an object with name and url properties (certification link)
+                    if (typeof item === 'object' && item.name && item.url) {
+                        return `<li><a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.name}</a></li>`;
+                    } else {
+                        // Handle regular text items
+                        return `<li>${item}</li>`;
+                    }
+                }).join('')}
             </ul>
         </div>
     `).join('');

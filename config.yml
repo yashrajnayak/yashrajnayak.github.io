@@ -26,10 +26,9 @@ experience:
       role: "Program Manager, Developer Relations"
       date: "Mar 2024 - Present"
       responsibilities:
-        - "Led planning and execution of Constellation 2024, GitHub's developer conference in India"
-        - "Growing key programs like the Global Meetups Program and premier events (GitHub Universe Recap, GitHub Connect)"
-        - "Scaling the GitTogethers program across India with monthly developer meetups in major cities"
-        - "Representing developer voices internally to improve the GitHub ecosystem"
+        - "End-to-end execution of Constellation 2024, GitHub's developer conference with 900+ in-person attendees in Bengaluru, India"
+        - "Growing key programs like the Global Meetups Program and 1st party events such as GitHub Universe Recap and GitHub Connect India"
+        - "Scaling GitTogethers in India, developer meetups led by local community experts and powered by GitHub. Hosting 4 premier developer meetups every month in Bengaluru, Delhi NCR, Hyderabad, and Mumbai since July 2024. Featured over 90 speakers and engaged more than 2,000 of India's most active developers, bringing them closer to the GitHub ecosystem"
       logo:
         light: "assets/GitHub_Logo.png"
         dark: "assets/GitHub_Logo_White.png"
@@ -39,7 +38,7 @@ experience:
       date: "Mar 2023 - Feb 2024"
       responsibilities:
         - "Built community programs from scratch, reaching 6,000+ active developers in 8 months"
-        - "Hosted 20 successful tech events with 3,000+ attendees (ReactJS Meetups, Women in Tech events)"
+        - "Hosted 20 successful tech events with 3,000+ attendees (React-n-Roll Meetups, Women in Tech Mixers)"
         - "Advocated for community needs within the GCC ecosystem"
       logo:
         light: "assets/ANSR_Logo.png"
@@ -51,7 +50,7 @@ experience:
       responsibilities:
         - "Expanded global community programs throughout Asia-Pacific"
         - "Led initiatives like #14DaysOfOutSystems Challenge and OutSystems Student Accelerator"
-        - "Supported user group organizers across APAC to build strong local communities"
+        - "Supported OutSystems User Group organizers across APAC to build strong local communities"
       logo:
         light: "assets/OutSystems_Logo.png"
         dark: "assets/OutSystems_Logo_White.png"
@@ -60,31 +59,50 @@ experience:
       role: "India Community Manager"
       date: "Jun 2018 - Feb 2021"
       responsibilities:
-        - "Managed India community of 200,000+ learners at this Japanese coding platform"
-        - "Established Community Partnership with Hacktoberfest 2020"
+        - "Helped this Japanese coding learning platform to grow userbase to 200,000+ learners in India"
+        - "Established Community Partnership with Hacktoberfest 2020 and other non-profits"
         - "Organized 30+ Learning Jams across major Indian cities"
         - "Reached 6,000+ high school students through Hour of Code™ 2018 Campaign"
       logo:
         light: "assets/Progate_Logo.png"
         dark: "assets/Progate_Logo_White.png"
 
+    - company: "Skillenza"
+      role: "Community Manager"
+      date: "Aug 2017 - Feb 2018"
+      responsibilities:
+        - "Worked alongside teams from DigitalOcean, AWS, Digital Domain, Société Générale, etc to plan and execute various developer events across the country (both online and offline)"
+        - "Helped in the execution of Hack2Innovate 2017, series of 7 deep-tech hackathons while working with teams from T-Hub, Microsoft, NVIDIA and PwC"
+        - "Handled Skillenza's student developer engagement and supported 25+ hackathons in different campuses across the country"
+      logo:
+        light: "assets/Skillenza_Logo.png"
+        dark: "assets/Skillenza_Logo_White.png"
+
 # Skills Section
 skills:
   title: "Skills & Technologies"
   categories:
-    - name: "Developer Relations"
-      items:
-        - "Program Management"
-        - "Developer Engagement"
-        - "Developer Advocacy"
     - name: "Technical"
       items:
+        - "C#"
         - "JavaScript"
         - "React"
-        - "Microsoft Azure"
+        - "GitHub Copilot"
         - "GitHub Actions"
+        - "Microsoft Azure"        
         - "Low-Code Development"
-    - name: "Languages"
+    - name: "Industry Knowledge"
       items:
-        - "English"
-        - "Hindi"
+        - "Program Management"
+        - "Developer Relations"
+        - "Developer Engagement and Advocacy"
+        - "User Research"
+        - "Community Building"  
+    - name: "Certifications"
+      items:
+        - name: "GitHub Foundations"
+          url: "https://www.credly.com/badges/7754da79-07d9-4abe-9f9e-e0c9a84a34b4/"
+        - name: "GitHub Copilot"
+          url: "https://www.credly.com/badges/370d77b0-13a0-45a7-92ae-3326f64786be/"
+        - name: "Meta Certified Community Manager"
+          url: "https://www.credly.com/badges/9f1fd9c1-3469-47d0-ad43-2647f638d622/"

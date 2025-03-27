@@ -13,6 +13,7 @@
     --card-background: #ffffff;
     --text-color: #1e293b;
     --text-muted: #64748b;
+    --heading-color: #2563eb;
     --border-radius: 1rem;
     --transition: all 0.3s ease;
 }
@@ -23,6 +24,7 @@
     --card-background: #1e293b;
     --text-color: #f1f5f9;
     --text-muted: #94a3b8;
+    --heading-color: #60a5fa; /* Brighter blue for better contrast in dark mode */
 }
 
 /* Base Styles */
@@ -81,6 +83,9 @@ section {
 section h2 {
     text-align: center;
     margin-bottom: 2rem;
+    color: var(--heading-color);
+    font-size: 1.8rem;
+    font-weight: 700;
 }
 
 /* List Style */
@@ -221,7 +226,7 @@ h1 {
 }
 
 .experience-content h3 {
-    color: var(--primary-color);
+    color: var(--heading-color);
     margin-bottom: 0.5rem;
 }
 
@@ -301,7 +306,7 @@ h1 {
 }
 
 .skill-category h3 {
-    color: var(--primary-color);
+    color: var(--heading-color);
     margin-bottom: 1rem;
 }
 
@@ -374,6 +379,10 @@ h1 {
     animation: slideUp 0.5s ease;
     animation-fill-mode: both;
     transition: var(--transition);
+    position: relative;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
 }
 
 .project-card:hover {
@@ -382,19 +391,23 @@ h1 {
 }
 
 .project-card h3 {
-    color: var(--primary-color);
+    color: var(--heading-color);
     margin-bottom: 0.75rem;
 }
 
 .project-card p {
     color: var(--text-muted);
-    margin-bottom: 1.25rem;
+    margin-bottom: 2.5rem;
+    flex: 1;
 }
 
 .project-links {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
 }
 
 .project-links a {
