@@ -102,6 +102,10 @@ skills:
 github_projects:
   title: Projects on GitHub
   pinned_repos:
+    - name: gittogethers
+      description: A modern, responsive web application for handling GitTogethers event registrations.
+      url: https://github.com/yashrajnayak/gittogethers
+      homepageUrl: https://gittogethers.github.io
     - name: connecticut
       description: Analyzes and visualizes connections between GitHub users, particularly useful for developer meetups and networking events.
       url: https://github.com/yashrajnayak/connecticut
@@ -110,15 +114,15 @@ github_projects:
       description: Tool to retrieve and display information about GitHub users.
       url: https://github.com/yashrajnayak/github-info
       homepageUrl: https://yashrajnayak.github.io/github-info/
-    - name: Form2HTML
-      description: A simple, browser-based tool that converts Google Form prefill URLs into custom HTML forms with matching CSS and JavaScript. Perfect for embedding forms in your own website while maintaining the Google Forms backend.
-      url: https://github.com/yashrajnayak/Form2HTML
-      homepageUrl: https://yashrajnayak.github.io/Form2HTML/
-    - name: apidocs2markdown
-      description: A powerful web tool that converts API documentation pages into clean, organized Markdown format.
-      url: https://github.com/yashrajnayak/apidocs2markdown
-      homepageUrl: https://yashrajnayak.github.io/apidocs2markdown/
     - name: Issues2PDF
       description: A React application that converts GitHub repository issues into well-formatted PDF documents.
       url: https://github.com/yashrajnayak/Issues2PDF
       homepageUrl: https://issues2pdf.vercel.app
+    - name: apidocs2markdown
+      description: A powerful web tool that converts API documentation pages into clean, organized Markdown format.
+      url: https://github.com/yashrajnayak/apidocs2markdown
+      homepageUrl: https://yashrajnayak.github.io/apidocs2markdown/
+    - name: Form2HTML
+      description: A simple, browser-based tool that converts Google Form prefill URLs into custom HTML forms with matching CSS and JavaScript. Perfect for embedding forms in your own website while maintaining the Google Forms backend.
+      url: https://github.com/yashrajnayak/Form2HTML
+      homepageUrl: https://yashrajnayak.github.io/Form2HTML/
