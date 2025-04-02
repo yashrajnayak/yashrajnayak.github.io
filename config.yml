@@ -102,10 +102,6 @@ skills:
 github_projects:
   title: Projects on GitHub
   pinned_repos:
-    - name: yashrajnayak.github.io
-      description: A minimalist, modern developer portfolio that's easily configurable through YAML. Built with vanilla JavaScript and designed for GitHub Pages.
-      url: https://github.com/yashrajnayak/yashrajnayak.github.io
-      homepageUrl: http://yashrajnayak.dev/
     - name: connecticut
       description: Analyzes and visualizes connections between GitHub users, particularly useful for developer meetups and networking events.
       url: https://github.com/yashrajnayak/connecticut
