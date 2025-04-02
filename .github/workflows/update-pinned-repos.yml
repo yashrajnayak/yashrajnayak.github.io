@@ -1,0 +1,103 @@
+name: Update Pinned Repositories
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN for the actions in this workflow
+permissions:
+  contents: write  # Needed to write back to the repo
+  pages: read
+
+jobs:
+  # Update config job
+  update-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install js-yaml
+
+      - name: Fetch and update pinned repositories data
+        env:
+          PORTFOLIO_WEBSITE_TOKEN: ${{ secrets.PORTFOLIO_WEBSITE_TOKEN }}
+          GITHUB_USERNAME: ${{ github.repository_owner }}
+        run: |
+          # Fetch pinned repositories using the token
+          echo "Fetching pinned repositories for $GITHUB_USERNAME"
+          PINNED_REPOS_JSON=$(curl -s -H "Authorization: Bearer $PORTFOLIO_WEBSITE_TOKEN" \
+            -H "Content-Type: application/json" \
+            -X POST \
+            -d "{\"query\":\"{ user(login: \\\"$GITHUB_USERNAME\\\") { pinnedItems(first: 6, types: REPOSITORY) { nodes { ... on Repository { name description url homepageUrl } } } } }\"}" \
+            https://api.github.com/graphql)
+            
+          # Create a Node.js script to update config.yml
+          cat > update-config.js <<'EOL'
+          const fs = require('fs');
+          const yaml = require('js-yaml');
+
+          // Read the original config.yml
+          const configFile = fs.readFileSync('config.yml', 'utf8');
+          const config = yaml.load(configFile);
+
+          // Parse the pinned repos data
+          const pinnedReposData = JSON.parse(process.env.PINNED_REPOS_JSON);
+          
+          if (pinnedReposData && pinnedReposData.data && pinnedReposData.data.user) {
+              const pinnedRepos = pinnedReposData.data.user.pinnedItems.nodes.map(repo => {
+                  return {
+                      name: repo.name,
+                      description: repo.description || 'No description available',
+                      url: repo.url,
+                      homepageUrl: repo.homepageUrl || null
+                  };
+              });
+              
+              // Add or update the github_projects section
+              config.github_projects = {
+                  title: "Projects on GitHub",
+                  pinned_repos: pinnedRepos
+              };
+              
+              // Write the updated config back to config.yml
+              fs.writeFileSync('config.yml', yaml.dump(config, { lineWidth: -1 }));
+              console.log('Updated config.yml with pinned repositories data');
+          } else {
+              console.error('Failed to parse pinned repositories data');
+              process.exit(1);
+          }
+          EOL
+          
+          # Run the script to update config.yml
+          export PINNED_REPOS_JSON="$PINNED_REPOS_JSON"
+          node update-config.js
+          
+          # Debug: Show updated config
+          echo "Updated config.yml content:"
+          cat config.yml
+      
+      - name: Commit and push changes if config.yml was modified
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add config.yml
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update pinned repositories in config.yml"
+            git push
+            echo "Changes pushed to repository"
+          fi
