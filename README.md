@@ -1,4 +1,4 @@
-# Developer Portfolio
+# Yashraj Nayak - Developer Portfolio
 
 A minimalist, modern developer portfolio that's easily configurable through YAML. Built with vanilla JavaScript and designed for GitHub Pages.
 
@@ -145,41 +145,6 @@ github_projects:
    - Fetches your pinned repositories and updates the config.yml file
    - Site deployment is handled by GitHub Pages settings in your repository
 
-## Customization
-
-### Theme Colors
-
-You can customize the theme colors by modifying the CSS variables in `styles.css`:
-
-```css
-:root {
-    --primary-color: #2563eb;
-    --secondary-color: #1e293b;
-    --background-color: #f8fafc;
-    --card-background: #ffffff;
-    --text-color: #1e293b;
-    --text-muted: #64748b;
-}
-```
-
-### Adding New Sections
-
-1. Add the section configuration to `config.yml`
-2. Create the HTML structure in `index.html`
-3. Add the corresponding JavaScript in `scripts.js`
-4. Style the section in `styles.css`
-
-## Domain Configuration
-
-To use a custom domain:
-1. Add your domain to the CNAME file
-2. Configure your domain's DNS settings as per GitHub Pages documentation
-3. Enable HTTPS in your repository's Settings > Pages
-
-## Contributing
-
-Feel free to submit issues and pull requests to improve the template.
-
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
@@ -187,5 +152,4 @@ This project is open source and available under the [MIT License](LICENSE).
 ## Acknowledgments
 
 - Icons provided by [Feather Icons](https://feathericons.com/)
-- Inspired by modern developer portfolios
 - YAML parsing by [js-yaml](https://github.com/nodeca/js-yaml)
