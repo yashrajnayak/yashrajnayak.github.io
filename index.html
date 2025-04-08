@@ -11,6 +11,12 @@
     <script src="assets/js/js-yaml.min.js"></script>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">git init...</p>
+    </div>
+
     <!-- Theme switcher -->
     <button class="theme-switch" aria-label="Toggle theme">
         <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -25,7 +31,7 @@
         </svg>
     </button>
 
-    <div class="container">
+    <div class="container content-hidden">
         <header>
             <img src="" alt="Profile" class="profile-img">
             <h1></h1>
@@ -51,7 +57,7 @@
         </section>
 
         <section class="projects-on-github">
-            <h2>Projects on GitHub</h2>
+            <h2></h2>
             <div id="projects" class="projects-grid">
                 <div class="loading">Loading projects...</div>
             </div>

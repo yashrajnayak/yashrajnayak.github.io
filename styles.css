@@ -27,6 +27,56 @@
     --heading-color: #60a5fa; /* Brighter blue for better contrast in dark mode */
 }
 
+/* Loading Screen Styles */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-color, #f8fafc);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease-out;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary-color, #2563eb);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    margin-top: 20px;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color, #1e293b);
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Hide empty elements until content loads */
+.content-hidden {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+.content-visible {
+    opacity: 1;
+}
+
 /* Base Styles */
 body {
     background-color: var(--background-color);
@@ -558,77 +608,6 @@ h1 {
 .see-all-repos a:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        width: 95%;
-        padding: 1rem;
-    }
-    
-    .profile-img {
-        width: 140px;
-        height: 140px;
-    }
-    
-    .social-links {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .social-links a {
-        justify-content: center;
-    }
-    
-    .skills-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .experience-item {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .experience-content {
-        width: 100%;
-        padding-bottom: 1rem;
-    }
-
-    .experience-content ul {
-        text-align: left;
-    }
-    
-    .company-logo {
-        width: 180px;
-        margin: 1.5rem auto 0;
-        order: 2;
-    }
-
-    .company-logo img {
-        max-height: 40px;
-    }
-
-    .project-item {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .project-content {
-        width: 100%;
-        padding-bottom: 1rem;
-    }
-
-    .project-content ul {
-        text-align: left;
-    }
-    
-    .project-image {
-        width: 100%;
-        min-height: unset;
-        aspect-ratio: 16/9; /* Set aspect ratio for mobile */
-        order: 2; /* Move the image below the content */
-    }
 }
 
 /* Responsive Design */
