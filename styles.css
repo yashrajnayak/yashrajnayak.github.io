@@ -348,6 +348,7 @@ h1 {
     padding: 1.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     transition: var(--transition);
+    text-align: left;
 }
 
 .skill-category:hover {
@@ -635,6 +636,18 @@ h1 {
         grid-template-columns: 1fr;
     }
     
+    .skill-category {
+        text-align: center;
+    }
+    
+    .skill-category li {
+        padding-left: 0;
+    }
+    
+    .skill-category li::before {
+        display: none;
+    }
+    
     .experience-item {
         flex-direction: column;
         text-align: center;
@@ -678,5 +691,17 @@ h1 {
         min-height: unset;
         aspect-ratio: 16/9; /* Set aspect ratio for mobile */
         order: 2; /* Move the image below the content */
+    }
+
+    .project-card {
+        text-align: center;
+    }
+    
+    .project-links {
+        position: relative;
+        left: 0;
+        bottom: 0;
+        justify-content: center;
+        margin-top: 1rem;
     }
 }
