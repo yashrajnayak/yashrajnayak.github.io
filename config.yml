@@ -102,10 +102,6 @@ skills:
 github_projects:
   title: Projects on GitHub
   pinned_repos:
-    - name: gittogethers
-      description: A modern, responsive web application for handling GitTogethers event registrations.
-      url: https://github.com/yashrajnayak/gittogethers
-      homepageUrl: https://gittogethers.github.io
     - name: connecticut
       description: Analyzes and visualizes connections between GitHub users, particularly useful for developer meetups and networking events.
       url: https://github.com/yashrajnayak/connecticut
