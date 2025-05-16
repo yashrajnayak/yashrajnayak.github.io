@@ -1,6 +1,14 @@
 site:
   title: Yashraj Nayak
   description: Developer Portfolio
+  seo:
+    title: Yashraj Nayak - Developer Portfolio
+    description: Developer Portfolio of Yashraj Nayak - Program Manager at GitHub Developer Relations
+    keywords: developer, portfolio, github, developer relations
+    author: Yashraj Nayak
+    og_image: https://avatars.githubusercontent.com/yashrajnayak
+    twitter_card: summary_large_image
+    base_url: https://yashrajnayak.dev
 header:
   greeting: Yashraj Nayak
   tagline: Developer and People Person.

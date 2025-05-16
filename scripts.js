@@ -64,6 +64,49 @@ function hideLoadingScreen(success = true) {
     }
 }
 
+// Update SEO meta tags
+function updateSEOTags(config) {
+    const seo = config.site.seo;
+    
+    // Update basic meta tags
+    document.title = seo.title;
+    document.querySelector('meta[name="description"]').content = seo.description;
+    document.querySelector('meta[name="keywords"]').content = seo.keywords;
+    document.querySelector('meta[name="author"]').content = seo.author;
+
+    // Update Open Graph tags
+    document.querySelector('meta[property="og:title"]').content = seo.title;
+    document.querySelector('meta[property="og:description"]').content = seo.description;
+    document.querySelector('meta[property="og:image"]').content = seo.og_image;
+    document.querySelector('meta[property="og:url"]').content = seo.base_url;
+
+    // Update Twitter Card tags
+    document.querySelector('meta[property="twitter:title"]').content = seo.title;
+    document.querySelector('meta[property="twitter:description"]').content = seo.description;
+    document.querySelector('meta[property="twitter:image"]').content = seo.og_image;
+    document.querySelector('meta[property="twitter:card"]').content = seo.twitter_card;
+    document.querySelector('meta[property="twitter:url"]').content = seo.base_url;
+
+    // Update JSON-LD
+    const jsonLD = {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": config.header.greeting,
+        "url": seo.base_url,
+        "sameAs": [
+            `https://github.com/${config.github}`,
+            config.linkedin_url
+        ],
+        "jobTitle": config.experience.jobs[0].role,
+        "worksFor": {
+            "@type": "Organization",
+            "name": config.experience.jobs[0].company
+        }
+    };
+    
+    document.querySelector('script[type="application/ld+json"]').textContent = JSON.stringify(jsonLD, null, 2);
+}
+
 // Theme Switcher
 document.addEventListener('DOMContentLoaded', async function() {
     const config = await loadConfig();
@@ -84,6 +127,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         localStorage.setItem('theme', newTheme);
     });
 
+    // Update SEO tags first
+    updateSEOTags(config);
+
     // Update page content from config
     updatePageContent(config);
 
@@ -96,10 +142,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // Update page content from config
 function updatePageContent(config) {
-    // Update document title and meta description
-    document.title = config.site.title;
-    document.querySelector('meta[name="description"]').content = config.site.description;
-
     // Create document fragments for batch DOM operations
     updateHeaderSection(config);
     updateAboutSection(config);
@@ -197,7 +239,7 @@ function updateProjectsSection(config) {
                 </ul>
             </div>
             <div class="project-image">
-                <img src="${project.picture}" alt="${project.name} project screenshot">
+                <img src="${project.picture}" alt="${project.name} project screenshot" loading="lazy">
             </div>
         `;
         
@@ -234,8 +276,8 @@ function updateExperienceSection(config) {
                 </ul>
             </div>
             <div class="company-logo">
-                <img src="${job.logo.light}" alt="${job.company} logo" class="light-mode-logo">
-                <img src="${job.logo.dark}" alt="${job.company} logo" class="dark-mode-logo">
+                <img src="${job.logo.light}" alt="${job.company} logo" class="light-mode-logo" loading="lazy">
+                <img src="${job.logo.dark}" alt="${job.company} logo" class="dark-mode-logo" loading="lazy">
             </div>
         `;
         
