@@ -16,6 +16,8 @@
     --heading-color: #2563eb;
     --border-radius: 1rem;
     --transition: all 0.3s ease;
+    --focus-ring-color: #3b82f6;
+    --focus-ring-offset: 3px;
 }
 
 /* Dark mode */
@@ -24,7 +26,30 @@
     --card-background: #1e293b;
     --text-color: #f1f5f9;
     --text-muted: #94a3b8;
-    --heading-color: #60a5fa; /* Brighter blue for better contrast in dark mode */
+    --heading-color: #60a5fa;
+    --focus-ring-color: #60a5fa;
+}
+
+/* Accessibility - Focus Styles */
+:focus-visible {
+    outline: 3px solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+/* Skip to main content link */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: 8px;
+    z-index: 100;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
 }
 
 /* Loading Screen Styles */
@@ -689,8 +714,8 @@ h1 {
     .project-image {
         width: 100%;
         min-height: unset;
-        aspect-ratio: 16/9; /* Set aspect ratio for mobile */
-        order: 2; /* Move the image below the content */
+        aspect-ratio: 16/9;
+        order: 2;
     }
 
     .project-card {
