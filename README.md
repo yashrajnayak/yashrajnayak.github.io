@@ -1,5 +1,7 @@
 # Yashraj Nayak - Developer Portfolio
 
+![image](https://github.com/user-attachments/assets/e63696e2-0660-457b-8691-584a47365fd8)
+
 <div align="left">
   
 [![Portfolio](https://img.shields.io/badge/🌐_Visit_Portfolio-Live-brightgreen?style=for-the-badge)](https://yashrajnayak.dev)
