@@ -1,6 +1,6 @@
 # Yashraj Nayak - Developer Portfolio
 
-![image](https://github.com/user-attachments/assets/e63696e2-0660-457b-8691-584a47365fd8)
+[![image](https://github.com/user-attachments/assets/e63696e2-0660-457b-8691-584a47365fd8)](https://yashrajnayak.github.io/)
 
 <div align="left">
   
