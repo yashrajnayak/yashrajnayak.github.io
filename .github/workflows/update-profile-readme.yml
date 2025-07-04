@@ -1,0 +1,72 @@
+name: Update Profile README from Config
+
+on:
+  push:
+    branches: [main]
+    paths: ['config.json']
+  workflow_dispatch:
+
+jobs:
+  update-profile-readme:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      repository-projects: write
+    
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate config.json
+        run: |
+          echo "🔍 Validating config.json..."
+          if [ ! -f "config.json" ]; then
+            echo "❌ config.json not found"
+            exit 1
+          fi
+          
+          if ! jq empty config.json 2>/dev/null; then
+            echo "❌ config.json is not valid JSON"
+            exit 1
+          fi
+          
+          echo "✅ config.json is valid"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Checkout profile repository
+        uses: actions/checkout@v4
+        with:
+          repository: yashrajnayak/yashrajnayak
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: profile-repo
+
+      - name: Generate Profile README
+        run: |
+          echo "🚀 Generating Profile README from config.json..."
+          node .github/workflows/update-profile-readme.js
+
+      - name: Check for changes in profile repo
+        id: verify-changed-files
+        run: |
+          cd profile-repo
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes to profile repository
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        run: |
+          cd profile-repo
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "🤖 Auto-update README.md from portfolio config.json"
+          git push
