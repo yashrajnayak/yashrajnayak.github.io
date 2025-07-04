@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      repository-projects: write
     
     steps:
       - name: Checkout current repository
@@ -43,7 +42,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: yashrajnayak/yashrajnayak
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PROFILE_REPO_TOKEN }}
           path: profile-repo
 
       - name: Generate Profile README

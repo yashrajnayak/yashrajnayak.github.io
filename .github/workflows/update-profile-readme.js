@@ -10,10 +10,9 @@ const path = require('path');
 
 function generateProfileReadme(config) {
   // Extract social links
-  const githubLink = config.social_links.find(link => link.name === 'GitHub')?.url;
   const linkedinLink = config.social_links.find(link => link.name === 'LinkedIn')?.url;
   
-  // Build skills section
+  // Build skills section - matching exact format from current README
   const technicalSkills = config.skills.categories.find(cat => cat.name === 'Technical')?.items || [];
   const devRelSkills = config.skills.categories.find(cat => cat.name === 'Developer Relations')?.items || [];
   
@@ -26,7 +25,7 @@ function generateProfileReadme(config) {
     return `- ${cert}`;
   }).join('\n');
 
-  // Build experience section
+  // Build experience section - matching the current format exactly
   const experienceSection = config.experience.jobs.map(job => {
     const responsibilities = job.responsibilities.map(resp => `- ${resp}`).join('\n');
     return `**${job.company}** | ${job.role} (${job.date})\n${responsibilities}`;
