@@ -34,6 +34,21 @@
       "name": "LinkedIn",
       "url": "https://www.linkedin.com/in/yashrajnayak/",
       "icon": "linkedin"
+    },
+    {
+      "name": "Instagram",
+      "url": "https://instagram.com/yashrajnayak",
+      "icon": "instagram"
+    },
+    {
+      "name": "Twitter",
+      "url": "https://x.com/yashrajnayak",
+      "icon": "twitter"
+    },
+    {
+      "name": "YouTube",
+      "url": "https://www.youtube.com/c/yashrajnayak",
+      "icon": "youtube"
     }
   ],
   "github_username": "yashrajnayak",
@@ -181,6 +196,10 @@
           {
             "name": "GitHub Copilot",
             "url": "https://www.credly.com/badges/370d77b0-13a0-45a7-92ae-3326f64786be/"
+          },
+          {
+            "name": "Microsoft Applied Skills: Accelerate App Development by using GitHub Copilot",
+            "url": "https://learn.microsoft.com/api/credentials/share/en-in/yashrajnayak/962FF988EFFAE330?sharingId=7AC6735FC0CD4144"
           },
           {
             "name": "Meta Certified Community Manager",
