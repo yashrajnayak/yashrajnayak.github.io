@@ -36,19 +36,14 @@
       "icon": "linkedin"
     },
     {
-      "name": "Instagram",
-      "url": "https://instagram.com/yashrajnayak",
-      "icon": "instagram"
-    },
-    {
       "name": "Twitter",
       "url": "https://x.com/yashrajnayak",
       "icon": "twitter"
-    },
+    }
     {
-      "name": "YouTube",
-      "url": "https://www.youtube.com/c/yashrajnayak",
-      "icon": "youtube"
+      "name": "Instagram",
+      "url": "https://instagram.com/yashrajnayak.dev",
+      "icon": "instagram"
     }
   ],
   "github_username": "yashrajnayak",
