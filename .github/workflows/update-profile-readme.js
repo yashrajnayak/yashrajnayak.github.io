@@ -93,14 +93,14 @@ ${aboutText}
 ${config.profile_image ? `
 ![Profile Banner](${config.profile_image})
 ` : ''}
-${projectsSection}## Skills & Technologies
+## Skills & Technologies
 
 ${skillsCodeBlock}
 
-### Certifications
+## Certifications
 ${certificationsList}
 
-## 📈 GitHub Stats
+${projectsSection}## 📈 GitHub Stats
 
 <div align="left">
 
