@@ -19,6 +19,7 @@ The live portfolio includes detailed professional experience, technical skills a
 - 🎭 **Interactive** - Smooth animations and engaging user experience
 - 🌓 **Dark/Light Mode** - Smooth transitions with persistent preferences
 - 🔗 **Dynamic Social Links** - Configurable social media and professional links
+- 🎬 **GIF Support** - Full support for animated GIFs with accessibility and performance optimizations
 - ⚙️ **Zero Code Changes** - Everything configured through JSON
 
 ## 📈 GitHub Stats
