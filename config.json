@@ -89,6 +89,16 @@
           "url": "https://gittogethers.github.io/",
           "title": "View Live Demo"
         }
+      },
+      {
+        "name": "Animated Demo Project",
+        "date": "2024",
+        "description": [
+          "Test project with animated GIF support",
+          "Demonstrates smooth animation rendering",
+          "Optimized for performance and accessibility"
+        ],
+        "picture": "assets/projects/test_animation.gif"
       }
     ]
   },
