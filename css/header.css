@@ -19,6 +19,35 @@ header {
     transform: scale(1.05);
 }
 
+/* Enhanced GIF Support for Profile Images */
+/* Respect user's motion preferences for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .profile-img[src$=".gif"],
+    .profile-img[src*=".gif?"],
+    .profile-img[src*=".gif#"] {
+        animation-play-state: paused !important;
+        animation-duration: 0ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+/* Performance optimizations for animated profile images */
+.profile-img[src$=".gif"],
+.profile-img[src*=".gif?"],
+.profile-img[src*=".gif#"] {
+    /* Optimize rendering for animated content */
+    image-rendering: auto;
+    image-rendering: crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    
+    /* Enable hardware acceleration for smoother animations */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    
+    /* Improve perceived performance */
+    will-change: auto;
+}
+
 h1 {
     font-size: clamp(2rem, 5vw, 3rem);
     margin-bottom: 1rem;
