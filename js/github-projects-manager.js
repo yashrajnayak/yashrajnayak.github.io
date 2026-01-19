@@ -4,7 +4,7 @@ export class GitHubProjectsManager {
         this.projectsContainer = null;
     }
 
-    // Fetch GitHub projects with "featured" topic
+    // Fetch GitHub projects with "featured" topic using Search API
     async fetchGitHubProjects(config) {
         this.projectsContainer = document.getElementById('projects');
         const username = config.github_username;
@@ -18,19 +18,19 @@ export class GitHubProjectsManager {
             // Clear loading message
             this.projectsContainer.innerHTML = '';
             
-            // Fetch repositories with "featured" topic using GitHub REST API
-            const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+            // Use GitHub Search API to find repositories with the "featured" topic
+            // This is more efficient than fetching all repos and filtering in the browser
+            const query = encodeURIComponent(`user:${username} topic:featured`);
+            const response = await fetch(`https://api.github.com/search/repositories?q=${query}&sort=updated&order=desc`);
             
             if (!response.ok) {
-                throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+                // Fallback to previous behavior if Search API fails or has rate limits
+                console.warn('GitHub Search API failed, falling back to all repos fetch');
+                return this.fetchGitHubProjectsFallback(username);
             }
             
-            const repos = await response.json();
-            
-            // Filter repositories that have "featured" topic
-            const featuredRepos = repos.filter(repo => 
-                repo.topics && repo.topics.includes('featured')
-            );
+            const data = await response.json();
+            const featuredRepos = data.items || [];
             
             if (featuredRepos.length > 0) {
                 this.renderProjects(featuredRepos, username);
@@ -44,6 +44,25 @@ export class GitHubProjectsManager {
         } catch (error) {
             this.projectsContainer.innerHTML = '<div class="loading">Failed to load projects. Please try again later.</div>';
             console.error('Error loading GitHub projects:', error);
+        }
+    }
+
+    // Fallback method to fetch all repos if Search API is unavailable
+    async fetchGitHubProjectsFallback(username) {
+        try {
+            const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+            if (!response.ok) throw new Error('GitHub API error');
+            
+            const repos = await response.json();
+            const featuredRepos = repos.filter(repo => repo.topics && repo.topics.includes('featured'));
+            
+            if (featuredRepos.length > 0) {
+                this.renderProjects(featuredRepos, username);
+            } else {
+                this.projectsContainer.innerHTML = '<div class="loading">No featured repositories found.</div>';
+            }
+        } catch (error) {
+            this.projectsContainer.innerHTML = '<div class="loading">Failed to load projects.</div>';
         }
     }
 

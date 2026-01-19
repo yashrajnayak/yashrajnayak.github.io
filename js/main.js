@@ -46,14 +46,40 @@ class PortfolioApp {
             if (features.github_projects && config.github_username) {
                 await this.githubProjectsManager.fetchGitHubProjects(config);
             }
-            
+
+            // Initialize Scroll to Top
+            this.initScrollToTop();
+
             // Hide loading screen after all content has loaded
-            this.loadingManager.hideLoadingScreen();
+            // Added short delay for smoother transition
+            setTimeout(() => {
+                this.loadingManager.hideLoadingScreen();
+            }, 500);
 
         } catch (error) {
             console.error('Error initializing portfolio:', error);
             this.loadingManager.hideLoadingScreen(false);
         }
+    }
+
+    initScrollToTop() {
+        const scrollBtn = document.getElementById('scroll-to-top');
+        if (!scrollBtn) return;
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollBtn.classList.add('visible');
+            } else {
+                scrollBtn.classList.remove('visible');
+            }
+        });
+
+        scrollBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     }
 }
 

@@ -14,13 +14,22 @@
 }
 
 /* Experience Header (always visible) */
+.experience-details {
+    width: 100%;
+}
+
 .experience-header {
     display: flex;
-    gap: 2rem;
+    justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
     cursor: pointer;
-    transition: var(--transition);
+    list-style: none; /* Hide default arrow */
+}
+
+/* Hide default arrow in Chrome/Safari */
+.experience-header::-webkit-details-marker {
+    display: none;
 }
 
 /* Experience Header Content */
@@ -28,7 +37,8 @@
     flex: 1;
 }
 
-.experience-header-content h3 {
+.experience-header h3 {
+    font-size: 1.25rem;
     color: var(--heading-color);
     margin-bottom: 0.5rem;
 }
@@ -41,16 +51,8 @@
 
 /* Experience Content (collapsible) */
 .experience-content {
-    padding: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.experience-item.expanded .experience-content {
     padding: 0 1.5rem 1.5rem;
-    max-height: 500px;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: var(--transition);
 }
 
 .experience-content ul {
@@ -84,7 +86,7 @@
     flex-shrink: 0;
 }
 
-.experience-item.expanded .accordion-toggle {
+.experience-details[open] .accordion-toggle svg {
     transform: rotate(180deg);
 }
 

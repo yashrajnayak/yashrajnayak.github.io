@@ -24,12 +24,15 @@ The live portfolio includes detailed professional experience, technical skills a
 ## ✨ Features
 
 - 🎨 **Modern Design** - Clean, responsive interface with dark/light theme support
-- 🚀 **Performance Optimized** - Fast loading with vanilla JavaScript
+- 🚀 **Performance Optimized** - Fast loading with vanilla JavaScript and GitHub Search API integration
+- 🔍 **SEO & Social Ready** - Static meta tags and resource preloading for better visibility
+- ♿ **Accessible** - Built with semantic HTML \`<details>\`/\`<summary>\` for better screen reader support
 - 📱 **Mobile First** - Fully responsive across all devices
 - 🔄 **Auto-Updated** - Content dynamically generated from \`config.json\`
-- 🎭 **Interactive** - Smooth animations and engaging user experience
 - 🌓 **Dark/Light Mode** - Smooth transitions with persistent preferences
 - 🔗 **Dynamic Social Links** - Configurable social media and professional links
+- 🔝 **Smooth Navigation** - Integrated Scroll-to-Top feature
+- 📑 **Professional Print** - Custom print stylesheet for beautiful PDF exports
 - ⚙️ **Zero Code Changes** - Everything configured through JSON
 
 ## 📈 GitHub Stats
@@ -61,24 +64,24 @@ function main() {
   try {
     // Read config.json
     const configPath = path.join(process.cwd(), 'config.json');
-    
+
     if (!fs.existsSync(configPath)) {
       console.error('❌ config.json not found in current directory');
       process.exit(1);
     }
 
     const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-    
+
     // Generate README content
     const readmeContent = generateReadme(config);
-    
+
     // Write README.md
     const readmePath = path.join(process.cwd(), 'README.md');
     fs.writeFileSync(readmePath, readmeContent);
-    
+
     console.log('✅ README.md updated successfully!');
     console.log('📝 Generated from config.json');
-    
+
   } catch (error) {
     console.error('❌ Error generating README:', error.message);
     process.exit(1);
