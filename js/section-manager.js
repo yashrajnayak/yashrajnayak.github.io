@@ -252,12 +252,6 @@ export class SectionManager {
         return experienceItem;
     }
 
-    // Empty toggle methods as we moved to native <details>
-    toggleExperienceAccordion(experienceItem) { }
-
-    // Empty toggle methods as we moved to native <details>
-    toggleProjectAccordion(projectItem) { }
-
     // Update skills section dynamically
     updateSkillsSection(config) {
         const skillsSection = document.querySelector('.skills');

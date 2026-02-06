@@ -1,6 +1,7 @@
 /* Skills Section */
 .skills h2 {
     font-family: var(--font-display);
+    text-align: center;
 }
 
 .skills-grid {
@@ -15,7 +16,7 @@
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--border-radius-xl);
-    padding: 2rem;
+    padding: 1.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     transition: var(--transition);
     text-align: left;

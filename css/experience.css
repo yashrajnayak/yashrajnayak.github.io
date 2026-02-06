@@ -104,7 +104,7 @@
     flex-shrink: 0;
 }
 
-.experience-details[open] .accordion-toggle svg {
+.experience-details[open] .accordion-toggle {
     transform: rotate(180deg);
 }
 

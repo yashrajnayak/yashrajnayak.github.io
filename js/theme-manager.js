@@ -27,8 +27,4 @@ export class ThemeManager {
         this.root.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
     }
-
-    getCurrentTheme() {
-        return this.root.getAttribute('data-theme');
-    }
 }

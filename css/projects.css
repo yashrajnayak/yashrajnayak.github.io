@@ -58,6 +58,8 @@
     color: var(--primary-color);
     margin-bottom: 0.5rem;
     font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 700;
 }
 
 .project-header-content .date {
@@ -79,11 +81,7 @@
     flex-shrink: 0;
 }
 
-.project-item.expanded .project-accordion-toggle {
-    transform: rotate(180deg);
-}
-
-.project-details[open] .project-accordion-toggle svg {
+.project-details[open] .project-accordion-toggle {
     transform: rotate(180deg);
 }
 
@@ -91,7 +89,7 @@
 .project-content {
     flex: 1;
     width: 100%;
-    padding: 2rem 3rem;
+    padding: 1.5rem;
     max-height: none;
     overflow: visible;
 }
@@ -109,7 +107,7 @@
     align-items: center;
     gap: 0.5rem;
     background-color: var(--primary-color);
-    color: #ffffff;
+    color: var(--on-primary-color);
     padding: 0.625rem 1.5rem;
     border-radius: var(--border-radius-full);
     text-decoration: none;
@@ -138,7 +136,7 @@
     }
 
     .project-content {
-        padding: 2rem 3rem;
+        padding: 1.5rem;
         max-height: none;
         overflow: visible;
     }
@@ -159,7 +157,7 @@
     color: var(--primary-color);
     margin-bottom: 0.5rem;
     font-family: var(--font-display);
-    font-size: 1.5rem;
+    font-size: 1.125rem;
     font-weight: 700;
 }
 
@@ -174,7 +172,7 @@
     color: var(--primary-color);
     margin-bottom: 0.5rem;
     font-family: var(--font-display);
-    font-size: 1.5rem;
+    font-size: 1.125rem;
     font-weight: 700;
 }
 
@@ -269,7 +267,7 @@
     background-color: var(--card-background);
     border-radius: var(--border-radius-xl);
     border: 1px solid var(--border-color);
-    padding: 2rem;
+    padding: 1.5rem;
     animation: slideUp 0.5s ease;
     animation-fill-mode: both;
     transition: var(--transition);
@@ -306,8 +304,8 @@
     gap: 1rem;
     flex-wrap: wrap;
     position: absolute;
-    bottom: 2rem;
-    left: 2rem;
+    bottom: 1.5rem;
+    left: 1.5rem;
 }
 
 .project-links a {

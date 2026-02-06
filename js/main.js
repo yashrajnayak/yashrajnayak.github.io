@@ -53,11 +53,8 @@ class PortfolioApp {
             // Open project details on desktop
             this.handleProjectDetailsDisplay();
 
-            // Hide loading screen after all content has loaded
-            // Added short delay for smoother transition
-            setTimeout(() => {
-                this.loadingManager.hideLoadingScreen();
-            }, 500);
+            // Hide loading screen after content has loaded
+            this.loadingManager.hideLoadingScreen();
 
         } catch (error) {
             console.error('Error initializing portfolio:', error);

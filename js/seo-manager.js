@@ -23,11 +23,6 @@ export class SEOManager {
         document.querySelector('meta[property="twitter:card"]').content = seo.twitter_card;
         document.querySelector('meta[property="twitter:url"]').content = seo.base_url;
 
-        // Extract GitHub username from social links for JSON-LD
-        const githubLink = config.social_links?.find(link => link.icon === 'github');
-        const githubUrl = githubLink?.url || `https://github.com/${config.github_username || ''}`;
-        const linkedinLink = config.social_links?.find(link => link.icon === 'linkedin');
-        
         // Build sameAs array dynamically
         const sameAs = config.social_links?.map(link => link.url).filter(Boolean) || [];
 

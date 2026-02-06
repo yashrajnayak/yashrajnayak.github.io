@@ -18,7 +18,6 @@ export class ConfigManager {
                 throw new Error('Failed to parse config file - empty or invalid JSON');
             }
             
-            console.log('Config loaded successfully');
             return this.config;
         } catch (error) {
             console.error('Error loading config:', error);
@@ -37,10 +36,6 @@ export class ConfigManager {
             </div>`;
     }
 
-    getConfig() {
-        return this.config;
-    }
-
     // Helper function to get section title with fallback
     getSectionTitle(sectionKey) {
         const titles = {
@@ -51,23 +46,5 @@ export class ConfigManager {
             github_projects: this.config?.github_projects?.title || 'GitHub Projects'
         };
         return titles[sectionKey] || '';
-    }
-
-    // Helper function to check if content exists for a section
-    hasContent(sectionKey) {
-        switch (sectionKey) {
-            case 'about':
-                return this.config?.about?.paragraphs?.length > 0;
-            case 'projects':
-                return this.config?.projects?.items?.length > 0;
-            case 'experience':
-                return this.config?.experience?.jobs?.length > 0;
-            case 'skills':
-                return this.config?.skills?.categories?.length > 0;
-            case 'github_projects':
-                return Boolean(this.config?.github_username);
-            default:
-                return true;
-        }
     }
 }

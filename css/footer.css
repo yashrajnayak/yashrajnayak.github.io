@@ -47,7 +47,7 @@
 
 .footer-social a:hover {
     background-color: var(--primary-color);
-    color: #ffffff;
+    color: var(--on-primary-color);
     transform: translateY(-2px);
 }
 

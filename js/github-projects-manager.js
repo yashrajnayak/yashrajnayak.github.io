@@ -8,6 +8,11 @@ export class GitHubProjectsManager {
     async fetchGitHubProjects(config) {
         this.projectsContainer = document.getElementById('projects');
         const username = config.github_username;
+
+        if (!this.projectsContainer) {
+            console.warn('Projects container not found, skipping GitHub projects');
+            return;
+        }
         
         if (!username) {
             console.warn('No GitHub username provided, skipping GitHub projects');
@@ -101,6 +106,7 @@ export class GitHubProjectsManager {
     // Helper function to add "See all repositories" link
     addSeeAllRepositoriesLink(username) {
         const projectsSection = document.querySelector('.projects-on-github');
+        if (!projectsSection) return;
         
         // Check if the "See all repositories" link already exists
         let seeAllLink = projectsSection.querySelector('.see-all-repos');
