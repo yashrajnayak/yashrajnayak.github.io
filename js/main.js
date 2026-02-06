@@ -49,6 +49,9 @@ class PortfolioApp {
 
             // Initialize Scroll to Top
             this.initScrollToTop();
+            
+            // Open project details on desktop
+            this.handleProjectDetailsDisplay();
 
             // Hide loading screen after all content has loaded
             // Added short delay for smoother transition
@@ -60,6 +63,23 @@ class PortfolioApp {
             console.error('Error initializing portfolio:', error);
             this.loadingManager.hideLoadingScreen(false);
         }
+    }
+
+    // Handle project details visibility based on viewport
+    handleProjectDetailsDisplay() {
+        const openDetailsOnDesktop = () => {
+            const isDesktop = window.innerWidth >= 769;
+            const projectDetails = document.querySelectorAll('.project-details');
+            projectDetails.forEach(details => {
+                details.open = isDesktop;
+            });
+        };
+        
+        // Run on load
+        openDetailsOnDesktop();
+        
+        // Run on resize
+        window.addEventListener('resize', openDetailsOnDesktop);
     }
 
     initScrollToTop() {

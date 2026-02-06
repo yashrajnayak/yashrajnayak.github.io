@@ -1,6 +1,6 @@
 /* About Section */
 .about {
-    max-width: 800px;
+    max-width: 42rem;
     margin: 0 auto 4rem;
     text-align: center;
 }
@@ -8,4 +8,9 @@
 .about p {
     color: var(--text-muted);
     margin-bottom: 1rem;
+    line-height: 1.7;
+}
+
+.about p:last-child {
+    margin-bottom: 0;
 }
