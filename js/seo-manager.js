@@ -32,7 +32,15 @@ export class SEOManager {
             "@type": "Person",
             "name": config.header.greeting,
             "url": seo.base_url,
-            "sameAs": sameAs
+            "image": seo.og_image,
+            "sameAs": sameAs,
+            "knowsAbout": [
+                "Developer Relations",
+                "Developer Communities",
+                "Program Management",
+                "University Alliances",
+                "Data and AI"
+            ]
         };
 
         // Add work info if available

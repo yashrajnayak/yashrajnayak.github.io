@@ -2,6 +2,32 @@
 export class GitHubProjectsManager {
     constructor() {
         this.projectsContainer = null;
+        this.requestTimeoutMs = 5000;
+    }
+
+    async fetchJson(url) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), this.requestTimeoutMs);
+
+        try {
+            const response = await fetch(url, { signal: controller.signal });
+            if (!response.ok) {
+                throw new Error(`GitHub API error: ${response.status}`);
+            }
+            return response.json();
+        } finally {
+            clearTimeout(timeoutId);
+        }
+    }
+
+    setMessage(message) {
+        if (!this.projectsContainer) return;
+
+        const messageElement = document.createElement('div');
+        messageElement.className = 'loading';
+        messageElement.setAttribute('role', 'status');
+        messageElement.textContent = message;
+        this.projectsContainer.replaceChildren(messageElement);
     }
 
     // Fetch GitHub projects with "featured" topic using Search API
@@ -26,48 +52,34 @@ export class GitHubProjectsManager {
             // Use GitHub Search API to find repositories with the "featured" topic
             // This is more efficient than fetching all repos and filtering in the browser
             const query = encodeURIComponent(`user:${username} topic:featured`);
-            const response = await fetch(`https://api.github.com/search/repositories?q=${query}&sort=updated&order=desc`);
-            
-            if (!response.ok) {
-                // Fallback to previous behavior if Search API fails or has rate limits
-                console.warn('GitHub Search API failed, falling back to all repos fetch');
-                return this.fetchGitHubProjectsFallback(username);
-            }
-            
-            const data = await response.json();
+            const data = await this.fetchJson(`https://api.github.com/search/repositories?q=${query}&sort=updated&order=desc`);
             const featuredRepos = data.items || [];
             
             if (featuredRepos.length > 0) {
                 this.renderProjects(featuredRepos, username);
             } else {
-                this.projectsContainer.innerHTML = `
-                    <div class="loading">
-                        No featured repositories found. Add the "featured" topic to your repositories to display them here.
-                    </div>
-                `;
+                this.setMessage('No featured repositories found.');
             }
         } catch (error) {
-            this.projectsContainer.innerHTML = '<div class="loading">Failed to load projects. Please try again later.</div>';
-            console.error('Error loading GitHub projects:', error);
+            console.warn('GitHub Search API failed, falling back to all repos fetch', error);
+            return this.fetchGitHubProjectsFallback(username);
         }
     }
 
     // Fallback method to fetch all repos if Search API is unavailable
     async fetchGitHubProjectsFallback(username) {
         try {
-            const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
-            if (!response.ok) throw new Error('GitHub API error');
-            
-            const repos = await response.json();
+            const repos = await this.fetchJson(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
             const featuredRepos = repos.filter(repo => repo.topics && repo.topics.includes('featured'));
             
             if (featuredRepos.length > 0) {
                 this.renderProjects(featuredRepos, username);
             } else {
-                this.projectsContainer.innerHTML = '<div class="loading">No featured repositories found.</div>';
+                this.setMessage('No featured repositories found.');
             }
         } catch (error) {
-            this.projectsContainer.innerHTML = '<div class="loading">Failed to load projects.</div>';
+            this.setMessage('GitHub projects are temporarily unavailable.');
+            console.error('Error loading GitHub projects:', error);
         }
     }
 
@@ -89,17 +101,35 @@ export class GitHubProjectsManager {
         const card = document.createElement('div');
         card.className = 'project-card';
         card.style.animationDelay = `${index * 0.1}s`;
-        
-        // Create content with improved accessibility
-        card.innerHTML = `
-            <h3>${repo.name}</h3>
-            ${repo.description ? `<p>${repo.description}</p>` : '<p>No description available</p>'}
-            <div class="project-links">
-                <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" aria-label="View ${repo.name} repository on GitHub">View Repository</a>
-                ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" rel="noopener noreferrer" aria-label="View live demo of ${repo.name}">Live Demo</a>` : ''}
-            </div>
-        `;
-        
+
+        const title = document.createElement('h3');
+        title.textContent = repo.name;
+
+        const description = document.createElement('p');
+        description.textContent = repo.description || 'No description available';
+
+        const links = document.createElement('div');
+        links.className = 'project-links';
+
+        const repositoryLink = document.createElement('a');
+        repositoryLink.href = repo.html_url;
+        repositoryLink.target = '_blank';
+        repositoryLink.rel = 'noopener noreferrer';
+        repositoryLink.setAttribute('aria-label', `View ${repo.name} repository on GitHub`);
+        repositoryLink.textContent = 'View Repository';
+        links.appendChild(repositoryLink);
+
+        if (repo.homepage) {
+            const homepageLink = document.createElement('a');
+            homepageLink.href = repo.homepage;
+            homepageLink.target = '_blank';
+            homepageLink.rel = 'noopener noreferrer';
+            homepageLink.setAttribute('aria-label', `View live demo of ${repo.name}`);
+            homepageLink.textContent = 'Live Demo';
+            links.appendChild(homepageLink);
+        }
+
+        card.append(title, description, links);
         return card;
     }
 

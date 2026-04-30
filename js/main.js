@@ -41,12 +41,6 @@ class PortfolioApp {
             // Update footer section
             this.footerManager.updateFooterSection(config);
 
-            // Conditionally fetch GitHub projects based on feature flag
-            const features = { github_projects: true, ...config.features };
-            if (features.github_projects && config.github_username) {
-                await this.githubProjectsManager.fetchGitHubProjects(config);
-            }
-
             // Initialize Scroll to Top
             this.initScrollToTop();
             
@@ -55,6 +49,14 @@ class PortfolioApp {
 
             // Hide loading screen after content has loaded
             this.loadingManager.hideLoadingScreen();
+
+            // Load GitHub projects after the main portfolio is visible.
+            const features = { github_projects: true, ...config.features };
+            if (features.github_projects && config.github_username) {
+                this.githubProjectsManager.fetchGitHubProjects(config).catch(error => {
+                    console.error('Error loading GitHub projects:', error);
+                });
+            }
 
         } catch (error) {
             console.error('Error initializing portfolio:', error);

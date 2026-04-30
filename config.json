@@ -14,7 +14,7 @@
       "description": "Developer Portfolio of Yashraj Nayak - Program Manager, Developer Relations",
       "keywords": "developer, portfolio, databricks, developer relations",
       "author": "Yashraj Nayak",
-      "og_image": "https://avatars.githubusercontent.com/yashrajnayak",
+      "og_image": "https://avatars.githubusercontent.com/yashrajnayak?s=512",
       "twitter_card": "summary_large_image",
       "base_url": "https://yashrajnayak.com"
     }
@@ -103,7 +103,9 @@
           "Own Databricks' university alliances and student programs strategy for India",
           "Build partnerships with faculty, university leadership, and student communities to integrate Databricks into teaching, projects, and research",
           "Design and execute scalable workshops, hackathons, and curriculum collaborations focused on Spark, Delta Lake, MLflow, and the Databricks Data Intelligence Platform"
-        ]
+        ],
+        "logo": "assets/logos/Databricks_Logo.svg",
+        "logo_dark": "assets/logos/Databricks_Logo_White.svg"
       },
       {
         "company": "MongoDB",
@@ -113,7 +115,9 @@
           "Collaborated with regional teams and internal stakeholders to align the MongoDB User Groups program",
           "Supported 40 existing MongoDB User Groups globally and launched or revived chapters in Seoul, Abu Dhabi, Rio de Janeiro, and Cape Town",
           "Managed operations as the DRI for 24 user group events, totaling 4,600+ RSVPs"
-        ]
+        ],
+        "logo": "assets/logos/MongoDB_Logo.svg",
+        "logo_dark": "assets/logos/MongoDB_Logo_White.svg"
       },
       {
         "company": "GitHub",

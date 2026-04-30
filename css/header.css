@@ -4,6 +4,7 @@ header {
     margin-bottom: clamp(2rem, 8vw, 5rem);
     padding-top: 5rem;
     animation: fadeIn 1s ease;
+    min-width: 0;
 }
 
 /* Profile Image with Glow Effect */
@@ -47,7 +48,8 @@ h1 {
     font-weight: 700;
     margin-bottom: 1rem;
     line-height: 1.1;
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
 }
 
 .tagline {
@@ -55,6 +57,8 @@ h1 {
     color: var(--text-muted);
     margin-bottom: 2rem;
     font-weight: 500;
+    max-width: 100%;
+    overflow-wrap: anywhere;
 }
 
 /* Social Links - Pill Buttons */
@@ -64,6 +68,7 @@ h1 {
     gap: 1rem;
     margin-bottom: 3rem;
     flex-wrap: wrap;
+    max-width: 100%;
 }
 
 .social-links a {
@@ -79,6 +84,8 @@ h1 {
     align-items: center;
     gap: 0.5rem;
     font-weight: 500;
+    min-width: 0;
+    white-space: nowrap;
 }
 
 .social-links a:hover {

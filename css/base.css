@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+html {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 /* Custom Properties */
 :root {
     --primary-color: #2563eb;
@@ -51,6 +56,13 @@ body {
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     transition: var(--transition);
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+img,
+svg {
+    max-width: 100%;
 }
 
 /* Accessibility - Focus Styles */
@@ -64,11 +76,13 @@ body {
     width: min(1200px, 90%);
     margin: 0 auto;
     padding: clamp(1rem, 5vw, 3rem);
+    min-width: 0;
 }
 
 /* Section Styles */
 section {
     margin-bottom: 4rem;
+    min-width: 0;
 }
 
 section h2 {
@@ -78,6 +92,7 @@ section h2 {
     font-size: 1.875rem;
     font-weight: 700;
     font-family: var(--font-display);
+    overflow-wrap: anywhere;
 }
 
 /* Glassmorphism Card Utility */
@@ -98,4 +113,15 @@ section h2 {
 [data-theme="dark"] .glass-card {
     background: rgba(30, 41, 59, 0.7);
     border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+    }
 }

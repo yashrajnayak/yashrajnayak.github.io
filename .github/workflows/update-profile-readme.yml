@@ -38,7 +38,26 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Check profile repository token
+        id: profile-token
+        env:
+          GH_TOKEN: ${{ secrets.PROFILE_REPO_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::warning::PROFILE_REPO_TOKEN is not configured. Skipping profile README update."
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if gh api repos/yashrajnayak/yashrajnayak >/dev/null 2>&1; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::PROFILE_REPO_TOKEN is invalid or cannot access yashrajnayak/yashrajnayak. Skipping profile README update."
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout profile repository
+        if: steps.profile-token.outputs.available == 'true'
         uses: actions/checkout@v4
         with:
           repository: yashrajnayak/yashrajnayak
@@ -46,11 +65,13 @@ jobs:
           path: profile-repo
 
       - name: Generate Profile README
+        if: steps.profile-token.outputs.available == 'true'
         run: |
           echo "🚀 Generating Profile README from config.json..."
           node .github/workflows/update-profile-readme.js
 
       - name: Check for changes in profile repo
+        if: steps.profile-token.outputs.available == 'true'
         id: verify-changed-files
         run: |
           cd profile-repo
@@ -61,7 +82,7 @@ jobs:
           fi
 
       - name: Commit and push changes to profile repository
-        if: steps.verify-changed-files.outputs.changed == 'true'
+        if: steps.profile-token.outputs.available == 'true' && steps.verify-changed-files.outputs.changed == 'true'
         run: |
           cd profile-repo
           git config --local user.email "action@github.com"

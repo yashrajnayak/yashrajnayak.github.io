@@ -1,14 +1,16 @@
 /* About Section */
 .about {
-    max-width: 42rem;
+    width: min(100%, 42rem);
     margin: 0 auto 4rem;
     text-align: center;
+    min-width: 0;
 }
 
 .about p {
     color: var(--text-muted);
     margin-bottom: 1rem;
     line-height: 1.7;
+    overflow-wrap: anywhere;
 }
 
 .about p:last-child {
