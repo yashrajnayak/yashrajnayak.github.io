@@ -11,7 +11,7 @@
     "description": "Developer Portfolio",
     "seo": {
       "title": "Yashraj Nayak - Developer Portfolio",
-      "description": "Developer Portfolio of Yashraj Nayak - University Alliances and Student Programs Lead, India at Databricks",
+      "description": "Developer Portfolio of Yashraj Nayak - Program Manager, Developer Relations",
       "keywords": "developer, portfolio, databricks, developer relations",
       "author": "Yashraj Nayak",
       "og_image": "https://avatars.githubusercontent.com/yashrajnayak",
@@ -21,7 +21,7 @@
   },
   "header": {
     "greeting": "Yashraj Nayak",
-    "tagline": "Developer Relations | Databricks | Codex Ambassador"
+    "tagline": "Program Manager, Developer Relations"
   },
   "social_links": [
     {
