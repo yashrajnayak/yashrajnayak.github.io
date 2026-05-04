@@ -4,6 +4,7 @@ import { SEOManager } from './seo-manager.js';
 import { ThemeManager } from './theme-manager.js';
 import { LoadingManager } from './loading-manager.js';
 import { SectionManager } from './section-manager.js';
+import { ResumeManager } from './resume-manager.js';
 import { HeaderManager } from './header-manager.js';
 import { GitHubProjectsManager } from './github-projects-manager.js';
 import { FooterManager } from './footer-manager.js';
@@ -15,6 +16,7 @@ class PortfolioApp {
         this.themeManager = new ThemeManager();
         this.loadingManager = new LoadingManager();
         this.sectionManager = new SectionManager(this.configManager);
+        this.resumeManager = new ResumeManager();
         this.headerManager = new HeaderManager();
         this.githubProjectsManager = new GitHubProjectsManager();
         this.footerManager = new FooterManager();
@@ -37,6 +39,9 @@ class PortfolioApp {
 
             // Update page content from config
             this.sectionManager.updatePageContent(config);
+
+            // Render one-page resume from the same profile data
+            this.resumeManager.updateResumeSection(config);
 
             // Update footer section
             this.footerManager.updateFooterSection(config);
