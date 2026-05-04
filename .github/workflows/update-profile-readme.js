@@ -3,185 +3,258 @@
 const fs = require('fs');
 const path = require('path');
 
-/**
- * Generate Profile README.md content from config.json
- * This script updates the {username}/{username} repository README
- * Based on the config.json from the portfolio repository
- */
+const TOP_REPOS_START = '<!-- TOP-REPOS:START -->';
+const TOP_REPOS_END = '<!-- TOP-REPOS:END -->';
+const DEFAULT_TOP_REPOS_COMMENT =
+  '<!-- Portfolio feed: data/top-repos.json is generated from the same ranked repository list. -->';
 
-function generateProfileReadme(config) {
-  try {
-    // Extract social links from config (no hardcoded fallbacks)
-    const socialLinks = {
-      portfolio: config.site?.seo?.base_url,
-      linkedin: config.social_links?.find(link => link.name === 'LinkedIn')?.url,
-      twitter: config.social_links?.find(link => link.name === 'Twitter')?.url,
-      instagram: config.social_links?.find(link => link.name === 'Instagram')?.url
-    };
-    
-    // Build skills section with better error handling
-    const skillsCategories = config.skills?.categories || [];
-    const technicalSkills = skillsCategories.find(cat => cat.name === 'Technical')?.items || [];
-    const devRelSkills = skillsCategories.find(cat => cat.name === 'Developer Relations')?.items || [];
-    
-    // Build certifications section
-    const certifications = skillsCategories.find(cat => cat.name === 'Certifications')?.items || [];
-    const certificationsList = certifications.length > 0 
-      ? certifications.map(cert => {
-          if (typeof cert === 'object' && cert.name && cert.url) {
-            return `- [${cert.name}](${cert.url})`;
-          }
-          return `- ${cert}`;
-        }).join('\n')
-      : '- Coming soon...';
+function findByName(items, name) {
+  return items?.find((item) => item.name === name);
+}
 
-    // Build projects section if it exists and is enabled
-    let projectsSection = '';
-    if (config.features?.projects && config.projects?.items?.length > 0) {
-      const projectsList = config.projects.items.map(project => {
-        const descriptions = project.description?.map(desc => `- ${desc}`).join('\n') || '';
-        let projectContent = `**${project.name}**${project.date ? ` (${project.date})` : ''}\n${descriptions}`;
-        
-        // Add link if available
-        if (project.link?.url) {
-          projectContent += `\n- [${project.link.title || 'View Project'}](${project.link.url})`;
-        }
-        
-        return projectContent;
-      }).join('\n\n');
-      
-      projectsSection = `## ${config.projects.title || 'Projects'}
+function socialUrl(config, name) {
+  return findByName(config.social_links, name)?.url || '';
+}
 
-${projectsList}
+function getHandle(url) {
+  if (!url) {
+    return '';
+  }
 
-`;
+  return url.replace(/\/$/, '').split('/').pop() || '';
+}
+
+function certificationList(config) {
+  const certifications =
+    findByName(config.skills?.categories, 'Certifications')?.items || [];
+
+  if (certifications.length === 0) {
+    return '- Coming soon...';
+  }
+
+  return certifications
+    .map((certification) => {
+      if (typeof certification === 'object' && certification.name && certification.url) {
+        return `- [${certification.name}](${certification.url})`;
+      }
+
+      return `- ${certification}`;
+    })
+    .join('\n');
+}
+
+function currentCompany(config) {
+  return config.experience?.jobs?.[0]?.company || 'Databricks';
+}
+
+function topReposFromReadme(readme) {
+  const start = readme.indexOf(TOP_REPOS_START);
+  const end = readme.indexOf(TOP_REPOS_END);
+
+  if (start === -1 || end === -1 || end < start) {
+    return '';
+  }
+
+  const sectionEnd = end + TOP_REPOS_END.length;
+  const afterMarker = readme.slice(sectionEnd).match(/^\n(<!-- Portfolio feed:.*? -->)/);
+
+  return `${readme.slice(start, sectionEnd)}${
+    afterMarker ? `\n${afterMarker[1]}` : `\n${DEFAULT_TOP_REPOS_COMMENT}`
+  }`;
+}
+
+function escapeMarkdown(value) {
+  return String(value || '').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
+}
+
+function formatStars(value) {
+  return new Intl.NumberFormat('en-US').format(value);
+}
+
+function topReposFromData(profileRepoDir) {
+  const dataPath = path.join(profileRepoDir, 'data', 'top-repos.json');
+
+  if (!fs.existsSync(dataPath)) {
+    return `${TOP_REPOS_START}
+| Repository | Stars | Description | Language |
+| --- | ---: | --- | --- |
+${TOP_REPOS_END}
+${DEFAULT_TOP_REPOS_COMMENT}`;
+  }
+
+  const repos = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+  const rows = repos.map((repo) => {
+    const description = repo.description || 'No description provided.';
+    const language = repo.language || 'Mixed';
+
+    return `| [${escapeMarkdown(repo.name)}](${repo.url}) | ${formatStars(repo.stars)} | ${escapeMarkdown(description)} | ${escapeMarkdown(language)} |`;
+  });
+
+  return `${TOP_REPOS_START}
+| Repository | Stars | Description | Language |
+| --- | ---: | --- | --- |
+${rows.join('\n')}
+${TOP_REPOS_END}
+${DEFAULT_TOP_REPOS_COMMENT}`;
+}
+
+function topReposSection(profileRepoDir) {
+  const readmePath = path.join(profileRepoDir, 'README.md');
+
+  if (fs.existsSync(readmePath)) {
+    const section = topReposFromReadme(fs.readFileSync(readmePath, 'utf8'));
+
+    if (section) {
+      return section;
     }
+  }
 
-    // Build skills code block with better formatting
-    const skillsCodeBlock = `\`\`\`javascript
-const skills = {${technicalSkills.length > 0 ? `
-  technical: [${technicalSkills.map(skill => `'${skill}'`).join(', ')}],` : ''}${devRelSkills.length > 0 ? `
-  developerRelations: [${devRelSkills.map(skill => `'${skill}'`).join(', ')}],` : ''}
+  return topReposFromData(profileRepoDir);
+}
+
+function generateSocialBadges(config) {
+  const linkedin = socialUrl(config, 'LinkedIn');
+  const twitter = socialUrl(config, 'Twitter');
+  const instagram = socialUrl(config, 'Instagram');
+
+  return [
+    linkedin
+      ? `[![LinkedIn](https://img.shields.io/badge/LinkedIn-${getHandle(linkedin)}-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](${linkedin})`
+      : '',
+    twitter
+      ? `[![X](https://img.shields.io/badge/X-${getHandle(twitter)}-111111?style=for-the-badge&logo=x&logoColor=white)](${twitter})`
+      : '',
+    instagram
+      ? `[![Instagram](https://img.shields.io/badge/Instagram-${getHandle(instagram)}-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](${instagram})`
+      : '',
+  ]
+    .filter(Boolean)
+    .join('\n');
+}
+
+function generateProfileReadme(config, options = {}) {
+  const username = config.github_username || 'yashrajnayak';
+  const name = config.header?.greeting || 'Yashraj Nayak';
+  const role = config.header?.tagline || 'Program Manager, Developer Relations';
+  const company = currentCompany(config);
+  const profileRepoDir = options.profileRepoDir || path.join(process.cwd(), 'profile-repo');
+
+  return `<img src="./images/linkedin-cover.jpeg" alt="${name} banner" width="100%" />
+
+# Hi, I'm ${name}
+
+${role} at ${company}. I work at the intersection of developer communities, data and AI education, university programs, and practical tooling that helps teams run better developer experiences.
+
+<div align="left">
+
+${generateSocialBadges(config)}
+
+</div>
+
+## About
+
+- I lead University Alliances and Student Programs for ${company} in India, helping build a stronger pipeline of data and AI talent across institutions.
+- I have 9+ years of experience building and scaling developer communities across India and APAC.
+- Previously, I supported MongoDB User Groups globally, contributed to GitHub Developer Relations programs in India, grew OutSystems' APAC community, and helped Progate reach 200,000+ learners in India.
+- I enjoy turning repeatable community operations into lightweight tools, automations, playbooks, and products.
+- Based in Bangalore, India.
+
+## What I Work With
+
+\`\`\`javascript
+const yashraj = {
+  currentFocus: ['Databricks', 'University Alliances', 'Student Programs', 'Data + AI education'],
+  devRel: ['Program Management', 'Developer Engagement', 'Community Building', 'Technical Events'],
+  technical: ['JavaScript', 'React', 'C#', 'GitHub Actions', 'Microsoft Azure'],
   languages: ['English', 'Hindi']
 };
-\`\`\``;
+\`\`\`
 
-    // Use configurable greeting (completely dynamic) - H1 with first name only
-    let greeting = `# Hi there! 👋`;
-    if (config.header?.greeting) {
-      // Extract first name from greeting (assumes first word is the first name)
-      const firstName = config.header.greeting.split(' ')[0];
-      greeting = `# Hi! I am ${firstName} 👋`;
-    }
-    
-    // Generate about section
-    const aboutText = config.about?.paragraphs?.join('\n\n') || 'Welcome to my GitHub profile!';
-    
-    // Build the complete README with dynamic social links
-    const readme = `${greeting}
+## Most Starred Repos
 
-<div align="left">
-  ${socialLinks.portfolio ? `
-[![Portfolio](https://img.shields.io/badge/🌐_Visit_Portfolio-Live-brightgreen?style=for-the-badge)](${socialLinks.portfolio})` : ''}${socialLinks.linkedin ? `
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-0077B5?style=for-the-badge&logo=linkedin)](${socialLinks.linkedin})` : ''}${socialLinks.twitter ? `
-[![Twitter](https://img.shields.io/badge/Twitter-Profile-1DA1F2?style=for-the-badge&logo=twitter)](${socialLinks.twitter})` : ''}${socialLinks.instagram ? `
-[![Instagram](https://img.shields.io/badge/Instagram-Profile-E4405F?style=for-the-badge&logo=instagram)](${socialLinks.instagram})` : ''}
+${topReposSection(profileRepoDir)}
 
-</div>
+## Selected DevRel Work
 
-${aboutText}
-${config.profile_image ? `
-![Profile Banner](${config.profile_image})
-` : ''}
-## Skills & Technologies
-
-${skillsCodeBlock}
+- **GitHub Constellation 2024** - supported GitHub's Bengaluru developer conference with 20+ speakers and 900+ in-person attendees.
+- **GitTogether Meetups Automation System** - built a GitHub Actions pipeline for multi-repository event operations, issue creation, assignment, and lifecycle tracking.
+- **GitTogethers Registration Web Platform** - built a responsive event registration and check-in platform with GitHub API integration.
+- **MongoDB User Groups** - supported 40 existing user groups globally and helped launch or revive chapters in Seoul, Abu Dhabi, Rio de Janeiro, and Cape Town.
 
 ## Certifications
-${certificationsList}
 
-${projectsSection}## 📈 GitHub Stats
+${certificationList(config)}
+
+## GitHub Stats
 
 <div align="left">
 
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=${config.github_username || 'username'}&theme=dark&hide_border=true&include_all_commits=true&count_private=true)
+![GitHub Stats](https://github-readme-stats-fast.vercel.app/api?username=${username}&theme=dark&hide_border=true&include_all_commits=true&count_private=true)
 
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=${config.github_username || 'username'}&theme=dark&hide_border=true&include_all_commits=true&count_private=true&layout=compact)
+![Top Languages](https://github-readme-stats-fast.vercel.app/api/top-langs/?username=${username}&theme=dark&hide_border=true&include_all_commits=true&count_private=true&layout=compact)
 
 </div>
 `;
-
-    return readme;
-  } catch (error) {
-    console.error('❌ Error in generateProfileReadme:', error.message);
-    throw error;
-  }
 }
 
 function validateConfig(config) {
   const requiredFields = ['github_username'];
-  const missingFields = requiredFields.filter(field => !config[field]);
-  
+  const missingFields = requiredFields.filter((field) => !config[field]);
+
   if (missingFields.length > 0) {
     throw new Error(`Missing required config fields: ${missingFields.join(', ')}`);
   }
-  
+
   return true;
 }
 
 function main() {
   try {
-    // Read config.json from the current repository
     const configPath = path.join(process.cwd(), 'config.json');
-    
+
     if (!fs.existsSync(configPath)) {
-      console.error('❌ config.json not found in current directory');
+      console.error('config.json not found in current directory');
       process.exit(1);
     }
 
     const configContent = fs.readFileSync(configPath, 'utf8');
     let config;
-    
+
     try {
       config = JSON.parse(configContent);
     } catch (parseError) {
-      console.error('❌ Invalid JSON in config.json:', parseError.message);
+      console.error('Invalid JSON in config.json:', parseError.message);
       process.exit(1);
     }
-    
-    // Validate config structure
+
     validateConfig(config);
-    
-    // Generate Profile README content
-    const readmeContent = generateProfileReadme(config);
-    
-    // Write README.md to the profile repository
-    const profileReadmePath = path.join(process.cwd(), 'profile-repo', 'README.md');
-    
-    // Ensure the profile-repo directory exists
-    const profileRepoDir = path.dirname(profileReadmePath);
+
+    const profileRepoDir = path.join(process.cwd(), 'profile-repo');
+    const readmeContent = generateProfileReadme(config, { profileRepoDir });
+    const profileReadmePath = path.join(profileRepoDir, 'README.md');
+
     if (!fs.existsSync(profileRepoDir)) {
-      console.error('❌ profile-repo directory not found');
-      console.log('ℹ️  Expected directory:', profileRepoDir);
+      console.error('profile-repo directory not found');
+      console.log('Expected directory:', profileRepoDir);
       process.exit(1);
     }
-    
+
     fs.writeFileSync(profileReadmePath, readmeContent);
-    
-    console.log('✅ Profile README.md updated successfully!');
-    console.log('📝 Generated from config.json and written to profile repository');
-    console.log(`📄 README length: ${readmeContent.length} characters`);
-    
+
+    console.log('Profile README.md updated successfully.');
+    console.log('Generated from config.json and written to profile repository.');
+    console.log(`README length: ${readmeContent.length} characters.`);
   } catch (error) {
-    console.error('❌ Error generating Profile README:', error.message);
+    console.error('Error generating Profile README:', error.message);
+
     if (process.env.DEBUG) {
       console.error('Stack trace:', error.stack);
     }
+
     process.exit(1);
   }
 }
 
-// Run if called directly
 if (require.main === module) {
   main();
 }
