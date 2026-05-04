@@ -227,7 +227,12 @@
     ]
   },
   "github_projects": {
-    "title": "Projects on GitHub"
+    "title": "Most Starred GitHub Projects",
+    "source_url": "https://raw.githubusercontent.com/yashrajnayak/yashrajnayak/master/data/top-repos.json",
+    "max_repos": 6,
+    "excluded_repos": [
+      "yashrajnayak"
+    ]
   },
   "footer": {
     "show_social_links": true,

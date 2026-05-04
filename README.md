@@ -13,11 +13,11 @@ The live portfolio includes detailed professional experience, technical skills a
 ## ✨ Features
 
 - 🎨 **Modern Design** - Clean, responsive interface with dark/light theme support
-- 🚀 **Performance Optimized** - Fast loading with vanilla JavaScript and GitHub Search API integration
+- 🚀 **Performance Optimized** - Fast loading with vanilla JavaScript and a reusable most-starred repository feed
 - 🔍 **SEO & Social Ready** - Static meta tags and resource preloading for better visibility
 - ♿ **Accessible** - Built with semantic HTML `<details>`/`<summary>` for better screen reader support
 - 📱 **Mobile First** - Fully responsive across all devices
-- 🔄 **Auto-Updated** - Content dynamically generated from `config.json`
+- 🔄 **Auto-Updated** - Content dynamically generated from `config.json` and the GitHub profile repository feed
 - 🌓 **Dark/Light Mode** - Smooth transitions with persistent preferences
 - 🔗 **Dynamic Social Links** - Configurable social media and professional links
 - 🔝 **Smooth Navigation** - Integrated Scroll-to-Top feature
