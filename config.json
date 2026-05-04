@@ -168,15 +168,6 @@
         ],
         "logo": "assets/logos/Skillenza_Logo.png",
         "logo_dark": "assets/logos/Skillenza_Logo_White.png"
-      },
-      {
-        "company": "Uber",
-        "role": "Operations Consultant",
-        "date": "Sep 2016 - Oct 2016",
-        "responsibilities": [
-          "Managed onboarding for new partners and supported existing ones",
-          "Handled in-person communications between Uber and its partner community"
-        ]
       }
     ]
   },
