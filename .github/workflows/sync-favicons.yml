@@ -10,25 +10,20 @@ on:
 
 jobs:
   sync-favicons:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     permissions:
       contents: write
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
-
-      - name: Install image tooling
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y imagemagick
+          node-version: '24'
 
       - name: Sync favicon assets
         env:
