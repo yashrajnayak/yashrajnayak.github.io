@@ -1,5 +1,7 @@
 {
   "scripts": {
-    "build": "node scripts/build-assets.mjs"
+    "build": "node scripts/build-assets.mjs",
+    "sync:favicons": "node scripts/sync-favicons.mjs",
+    "sync:favicons:check": "node scripts/sync-favicons.mjs --check"
   }
 }

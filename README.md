@@ -24,6 +24,12 @@ The live portfolio includes detailed professional experience, technical skills a
 - 📑 **Professional Print** - Custom print stylesheet for beautiful PDF exports
 - ⚙️ **Zero Code Changes** - Everything configured through JSON
 
+## 🤖 Automation
+
+![Architecture diagram showing a GitHub profile avatar flowing through a scheduled GitHub Actions favicon sync workflow into generated favicon assets used by the portfolio site.](assets/readme/architecture-diagram.png)
+
+- **Favicon sync** - `.github/workflows/sync-favicons.yml` runs weekly, on demand, and whenever `config.json` changes. It fetches the GitHub profile picture for `github_username`, regenerates every file in `assets/favicons`, updates favicon cache-busting URLs, and commits only when the generated assets change.
+
 ## 📈 GitHub Stats
 
 <div align="left">
