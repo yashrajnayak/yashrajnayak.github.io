@@ -119,6 +119,12 @@
     padding: 0 1rem;
 }
 
+.company-logo:has(img[src*="Databricks_Logo"]),
+.company-logo:has(img[src*="MongoDB_Logo"]) {
+    width: 120px;
+    padding: 0;
+}
+
 .company-logo img {
     width: 100%;
     height: auto;
