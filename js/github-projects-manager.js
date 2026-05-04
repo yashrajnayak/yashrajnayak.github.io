@@ -3,6 +3,7 @@ export class GitHubProjectsManager {
     constructor() {
         this.projectsContainer = null;
         this.requestTimeoutMs = 5000;
+        this.defaultMaxRepos = 6;
     }
 
     async fetchJson(url) {
@@ -30,10 +31,86 @@ export class GitHubProjectsManager {
         this.projectsContainer.replaceChildren(messageElement);
     }
 
-    // Fetch GitHub projects with "featured" topic using Search API
+    getSettings(config) {
+        const settings = config.github_projects || {};
+        const username = config.github_username;
+        const excludedRepos = new Set([
+            username,
+            ...(settings.excluded_repos || [])
+        ].filter(Boolean));
+
+        return {
+            sourceUrl: settings.source_url,
+            maxRepos: Number.isInteger(settings.max_repos) ? settings.max_repos : this.defaultMaxRepos,
+            excludedRepos
+        };
+    }
+
+    normalizeRepo(repo) {
+        return {
+            name: repo.name,
+            description: repo.description || '',
+            url: repo.html_url || repo.url,
+            homepage: repo.homepage || '',
+            language: repo.language || '',
+            stars: repo.stars ?? repo.stargazers_count ?? 0,
+            forks: repo.forks ?? repo.forks_count ?? 0,
+            topics: repo.topics || [],
+            updatedAt: repo.updatedAt || repo.updated_at || '',
+            pushedAt: repo.pushedAt || repo.pushed_at || ''
+        };
+    }
+
+    getDisplayRepos(repos, settings) {
+        return repos
+            .map(repo => this.normalizeRepo(repo))
+            .filter(repo => repo.name && repo.url)
+            .filter(repo => !settings.excludedRepos.has(repo.name))
+            .sort((a, b) => {
+                if (b.stars !== a.stars) {
+                    return b.stars - a.stars;
+                }
+
+                const bDate = Date.parse(b.pushedAt || b.updatedAt) || 0;
+                const aDate = Date.parse(a.pushedAt || a.updatedAt) || 0;
+                return bDate - aDate;
+            })
+            .slice(0, settings.maxRepos);
+    }
+
+    async fetchFromProfileFeed(settings) {
+        if (!settings.sourceUrl) {
+            return [];
+        }
+
+        const repos = await this.fetchJson(settings.sourceUrl);
+        if (!Array.isArray(repos)) {
+            throw new Error('Top repositories feed must return an array');
+        }
+
+        return this.getDisplayRepos(repos, settings);
+    }
+
+    async fetchFromGitHubSearch(username, settings) {
+        const query = encodeURIComponent(`user:${username} fork:false archived:false`);
+        const perPage = Math.min(100, settings.maxRepos + settings.excludedRepos.size + 5);
+        const data = await this.fetchJson(`https://api.github.com/search/repositories?q=${query}&sort=stars&order=desc&per_page=${perPage}`);
+
+        return this.getDisplayRepos(data.items || [], settings);
+    }
+
+    async fetchFromGitHubRepos(username, settings) {
+        const repos = await this.fetchJson(`https://api.github.com/users/${username}/repos?type=owner&sort=updated&per_page=100`);
+        const publicRepos = repos.filter(repo => !repo.fork && !repo.archived);
+
+        return this.getDisplayRepos(publicRepos, settings);
+    }
+
+    // Fetch most-starred GitHub projects from the profile feed, then fall back to GitHub APIs.
     async fetchGitHubProjects(config) {
         this.projectsContainer = document.getElementById('projects');
         const username = config.github_username;
+        const settings = this.getSettings(config);
 
         if (!this.projectsContainer) {
             console.warn('Projects container not found, skipping GitHub projects');
@@ -46,41 +123,106 @@ export class GitHubProjectsManager {
         }
         
         try {
-            // Clear loading message
             this.projectsContainer.innerHTML = '';
-            
-            // Use GitHub Search API to find repositories with the "featured" topic
-            // This is more efficient than fetching all repos and filtering in the browser
-            const query = encodeURIComponent(`user:${username} topic:featured`);
-            const data = await this.fetchJson(`https://api.github.com/search/repositories?q=${query}&sort=updated&order=desc`);
-            const featuredRepos = data.items || [];
-            
-            if (featuredRepos.length > 0) {
-                this.renderProjects(featuredRepos, username);
-            } else {
-                this.setMessage('No featured repositories found.');
+
+            const topRepos = await this.fetchFromProfileFeed(settings);
+
+            if (topRepos.length > 0) {
+                this.renderProjects(topRepos, username);
+                return;
             }
+
+            throw new Error('Top repositories feed did not return any projects');
         } catch (error) {
-            console.warn('GitHub Search API failed, falling back to all repos fetch', error);
-            return this.fetchGitHubProjectsFallback(username);
+            console.warn('Top repositories feed failed, falling back to GitHub Search API', error);
+            return this.fetchGitHubProjectsFallback(username, settings);
         }
     }
 
-    // Fallback method to fetch all repos if Search API is unavailable
-    async fetchGitHubProjectsFallback(username) {
+    // Fallback method to fetch most-starred repos if the profile feed is unavailable
+    async fetchGitHubProjectsFallback(username, settings) {
         try {
-            const repos = await this.fetchJson(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
-            const featuredRepos = repos.filter(repo => repo.topics && repo.topics.includes('featured'));
-            
-            if (featuredRepos.length > 0) {
-                this.renderProjects(featuredRepos, username);
+            const topRepos = await this.fetchFromGitHubSearch(username, settings);
+
+            if (topRepos.length > 0) {
+                this.renderProjects(topRepos, username);
+                return;
+            }
+
+            throw new Error('GitHub Search API did not return any projects');
+        } catch (error) {
+            console.warn('GitHub Search API failed, falling back to user repositories', error);
+            return this.fetchGitHubProjectsReposFallback(username, settings);
+        }
+    }
+
+    async fetchGitHubProjectsReposFallback(username, settings) {
+        try {
+            const topRepos = await this.fetchFromGitHubRepos(username, settings);
+
+            if (topRepos.length > 0) {
+                this.renderProjects(topRepos, username);
             } else {
-                this.setMessage('No featured repositories found.');
+                this.setMessage('No public repositories found.');
             }
         } catch (error) {
             this.setMessage('GitHub projects are temporarily unavailable.');
             console.error('Error loading GitHub projects:', error);
         }
+    }
+
+    formatNumber(value) {
+        return new Intl.NumberFormat('en-US').format(value || 0);
+    }
+
+    createProjectMeta(repo) {
+        const meta = document.createElement('div');
+        meta.className = 'project-meta';
+
+        const stats = [
+            { icon: 'star', label: `${this.formatNumber(repo.stars)} stars` },
+            { icon: 'call_split', label: `${this.formatNumber(repo.forks)} forks` }
+        ];
+
+        if (repo.language) {
+            stats.push({ icon: 'code', label: repo.language });
+        }
+
+        stats.forEach(stat => {
+            const item = document.createElement('span');
+            item.className = 'project-stat';
+
+            const icon = document.createElement('span');
+            icon.className = 'material-symbols-outlined';
+            icon.setAttribute('aria-hidden', 'true');
+            icon.textContent = stat.icon;
+
+            const label = document.createElement('span');
+            label.textContent = stat.label;
+
+            item.append(icon, label);
+            meta.appendChild(item);
+        });
+
+        return meta;
+    }
+
+    createTopics(repo) {
+        const topics = repo.topics.slice(0, 3);
+        if (topics.length === 0) {
+            return null;
+        }
+
+        const topicList = document.createElement('div');
+        topicList.className = 'project-topics';
+
+        topics.forEach(topic => {
+            const item = document.createElement('span');
+            item.textContent = topic;
+            topicList.appendChild(item);
+        });
+
+        return topicList;
     }
 
     // Render GitHub projects
@@ -103,16 +245,26 @@ export class GitHubProjectsManager {
         card.style.animationDelay = `${index * 0.1}s`;
 
         const title = document.createElement('h3');
-        title.textContent = repo.name;
+        const titleLink = document.createElement('a');
+        titleLink.href = repo.url;
+        titleLink.target = '_blank';
+        titleLink.rel = 'noopener noreferrer';
+        titleLink.setAttribute('aria-label', `View ${repo.name} repository on GitHub`);
+        titleLink.textContent = repo.name;
+        title.appendChild(titleLink);
+
+        const meta = this.createProjectMeta(repo);
 
         const description = document.createElement('p');
-        description.textContent = repo.description || 'No description available';
+        description.textContent = repo.description || 'No description provided.';
+
+        const topics = this.createTopics(repo);
 
         const links = document.createElement('div');
         links.className = 'project-links';
 
         const repositoryLink = document.createElement('a');
-        repositoryLink.href = repo.html_url;
+        repositoryLink.href = repo.url;
         repositoryLink.target = '_blank';
         repositoryLink.rel = 'noopener noreferrer';
         repositoryLink.setAttribute('aria-label', `View ${repo.name} repository on GitHub`);
@@ -129,7 +281,11 @@ export class GitHubProjectsManager {
             links.appendChild(homepageLink);
         }
 
-        card.append(title, description, links);
+        card.append(title, meta, description);
+        if (topics) {
+            card.appendChild(topics);
+        }
+        card.appendChild(links);
         return card;
     }
 
