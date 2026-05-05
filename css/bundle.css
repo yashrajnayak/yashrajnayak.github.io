@@ -1149,7 +1149,7 @@ h1 {
 
 .company-logo:has(img[src*="Databricks_Logo"]),
 .company-logo:has(img[src*="MongoDB_Logo"]) {
-    width: 120px;
+    width: 92px;
     padding: 0;
 }
 
