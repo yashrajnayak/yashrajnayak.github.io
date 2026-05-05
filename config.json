@@ -1,7 +1,6 @@
 {
   "features": {
     "about": true,
-    "resume": true,
     "projects": true,
     "experience": true,
     "skills": true,
