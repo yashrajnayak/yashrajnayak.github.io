@@ -1,47 +1,64 @@
-# Yashraj Nayak - Developer Portfolio
+# Yashraj Nayak — portfolio content
 
-<div align="left">
-  
-[![Portfolio](https://img.shields.io/badge/🌐_Visit_Portfolio-Live-brightgreen?style=for-the-badge)](https://yashrajnayak.com)
-[![GitHub](https://img.shields.io/badge/GitHub-Profile-181717?style=for-the-badge&logo=github)](https://github.com/yashrajnayak)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/yashrajnayak/)
+This repository contains the personal configuration, media, custom domain, and profile integrations for [yashrajnayak.com](https://yashrajnayak.com). The reusable renderer and tests live in [Developer Portfolio](https://github.com/yashrajnayak/developer-portfolio); this site pins a tested release in `template-version.json`.
 
-</div>
+[Visit the portfolio](https://yashrajnayak.com) · [Connect on LinkedIn](https://www.linkedin.com/in/yashrajnayak/) · [View the engine release](https://github.com/yashrajnayak/developer-portfolio/releases/tag/v2.0.0)
 
-The live portfolio includes detailed professional experience, technical skills and certifications, featured projects and achievements, and contact information.
+## Preview
 
-## ✨ Features
+![Desktop preview of the portfolio hero, impact metrics, case studies, experience, curated work, and contact call to action](assets/readme/portfolio-v2-desktop.png)
 
-- 🎨 **Modern Design** - Clean, responsive interface with dark/light theme support
-- 🚀 **Performance Optimized** - Fast loading with vanilla JavaScript and a reusable most-starred repository feed
-- 🔍 **SEO & Social Ready** - Static meta tags and resource preloading for better visibility
-- ♿ **Accessible** - Built with semantic HTML `<details>`/`<summary>` for better screen reader support
-- 📱 **Mobile First** - Fully responsive across all devices
-- 🔄 **Auto-Updated** - Content dynamically generated from `config.json` and the GitHub profile repository feed
-- 🌓 **Dark/Light Mode** - Smooth transitions with persistent preferences
-- 🔗 **Dynamic Social Links** - Configurable social media and professional links
-- 🔝 **Smooth Navigation** - Integrated Scroll-to-Top feature
-- 📑 **Professional Print** - Custom print stylesheet for beautiful PDF exports
-- ⚙️ **Zero Code Changes** - Everything configured through JSON
+<details>
+<summary>View the 390px mobile preview</summary>
 
-## 📈 GitHub Stats
+![Mobile preview showing the compact header, two-column impact metrics, collapsible case studies, timeline, proof, curated work, and contact call to action](assets/readme/portfolio-v2-mobile.png)
 
-<div align="left">
+</details>
 
-![GitHub Stats](https://github-readme-stats-fast.vercel.app/api?username=yashrajnayak&theme=dark&hide_border=true&include_all_commits=true&count_private=true)
+## Content model
 
-![Top Languages](https://github-readme-stats-fast.vercel.app/api/top-langs/?username=yashrajnayak&theme=dark&hide_border=true&include_all_commits=true&count_private=true&layout=compact)
+`config.json` is the only source for professional positioning, impact metrics, case studies, experience, capabilities, curated tools, SEO, contact links, and GitHub profile content. Personal assets live under `assets/`; no career claim is duplicated in repository scripts or static HTML.
 
-</div>
+The generated site is static before JavaScript runs. JavaScript only enhances theme selection, the mobile navigation, and responsive disclosures.
 
-## 🤝 Connect
+## Architecture
 
-Let's connect and build something amazing together!
+![Pinned-release architecture showing personal content flowing through the Developer Portfolio engine into GitHub Pages and the GitHub profile README](assets/readme/live-architecture.png)
 
-- 🌐 **Portfolio**: [https://yashrajnayak.com](https://yashrajnayak.com)
-- 💻 **GitHub**: [https://github.com/yashrajnayak](https://github.com/yashrajnayak)
-- 🔗 **LinkedIn**: [https://www.linkedin.com/in/yashrajnayak/](https://www.linkedin.com/in/yashrajnayak/)
+On every eligible change, the Pages workflow checks out the pinned engine release, validates this repository against its schema, builds a complete `dist/` site, runs unit, HTML, link, local-path, Playwright, and axe checks, then publishes with the official GitHub Pages actions.
 
----
+The profile workflow uses the same generated schema output and preserves the independently refreshed `TOP-REPOS` feed in the profile repository.
 
-*Based on [portfolio template](https://github.com/yashrajnayak/developer-portfolio) originally created by [Yashraj Nayak](https://github.com/yashrajnayak)*
+## Local preview
+
+Requirements: Git, Node.js 20 or newer, and `jq`.
+
+```bash
+git clone --depth 1 --branch "$(jq -r .version template-version.json)" \
+  https://github.com/yashrajnayak/developer-portfolio.git .portfolio-engine
+npm ci --prefix .portfolio-engine
+PORTFOLIO_CONFIG="$PWD/config.json" \
+PORTFOLIO_OUTPUT="$PWD/.portfolio-engine/dist" \
+  npm --prefix .portfolio-engine run validate:all
+PORTFOLIO_OUTPUT="$PWD/.portfolio-engine/dist" \
+  node .portfolio-engine/scripts/serve.mjs
+```
+
+Open `http://127.0.0.1:4173`.
+
+## Updating content
+
+1. Edit `config.json` and assets on a branch.
+2. Open a pull request and wait for `validate-site`.
+3. Review the desktop and 390px screenshots.
+4. Merge only after schema, static HTML, accessibility, and browser checks pass.
+
+## Upgrading or rolling back
+
+Run **Actions → Propose portfolio engine upgrade**. The workflow resolves a release, runs the full acceptance suite, and opens a tested draft pull request that changes only `template-version.json`.
+
+Rollback is the same safe operation: change `template-version.json` to the previous release tag, validate, and merge. Personal content and media remain untouched.
+
+## License
+
+[MIT](LICENSE)

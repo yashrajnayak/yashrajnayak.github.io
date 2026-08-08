@@ -1,108 +1,115 @@
 {
-  "features": {
-    "about": true,
-    "projects": true,
-    "experience": true,
-    "skills": true,
-    "github_projects": true
-  },
+  "$schema": "https://raw.githubusercontent.com/yashrajnayak/developer-portfolio/v2.0.0/config.schema.json",
+  "schema_version": 2,
   "site": {
-    "title": "Yashraj Nayak",
-    "description": "Developer Portfolio",
+    "base_url": "https://yashrajnayak.com",
+    "language": "en",
     "seo": {
-      "title": "Yashraj Nayak - Developer Portfolio",
-      "description": "Developer Portfolio of Yashraj Nayak - Program Manager, Developer Relations",
-      "keywords": "developer, portfolio, databricks, developer relations",
-      "author": "Yashraj Nayak",
-      "og_image": "https://avatars.githubusercontent.com/yashrajnayak?s=512",
-      "twitter_card": "summary_large_image",
-      "base_url": "https://yashrajnayak.com"
+      "title": "Yashraj Nayak — Developer Relations & University Programs",
+      "description": "Yashraj Nayak builds developer education, university partnerships, events, and community systems across India and APAC.",
+      "keywords": ["developer relations", "university programs", "developer education", "community programs", "India"],
+      "og_image": "https://yashrajnayak.com/assets/profile/yashraj-nayak.png",
+      "og_image_alt": "Portrait of Yashraj Nayak"
     }
   },
-  "header": {
-    "greeting": "Yashraj Nayak",
-    "tagline": "Program Manager, Developer Relations"
+  "person": {
+    "name": "Yashraj Nayak",
+    "professional_headline": "Developer Relations and University Programs Leader",
+    "current_role": "University Alliances and Student Programs Lead, India",
+    "organization": "Databricks",
+    "location": "Bengaluru, India",
+    "avatar": "assets/profile/yashraj-nayak.png",
+    "github_username": "yashrajnayak",
+    "focus_areas": ["University partnerships", "Developer education", "Community programs", "Event operations", "Program automation"],
+    "languages": ["English", "Hindi"]
   },
-  "social_links": [
-    {
-      "name": "GitHub",
-      "url": "https://github.com/yashrajnayak",
-      "icon": "github",
-      "required": true
-    },
-    {
-      "name": "LinkedIn",
-      "url": "https://www.linkedin.com/in/yashrajnayak/",
-      "icon": "linkedin"
-    },
-    {
-      "name": "Twitter",
-      "url": "https://x.com/yashrajnayak",
-      "icon": "twitter"
-    },
-    {
-      "name": "Instagram",
-      "url": "https://instagram.com/yashrajnayak.dev",
-      "icon": "instagram"
-    }
+  "hero": {
+    "heading": "I build developer programs that turn learning into lasting communities.",
+    "summary": "University Alliances and Student Programs Lead for Databricks in India, with 9+ years building developer education, events, and community systems across India and APAC.",
+    "primary_cta": {"label": "View selected impact", "url": "#impact"},
+    "secondary_cta": {"label": "Connect on LinkedIn", "url": "https://www.linkedin.com/in/yashrajnayak/"}
+  },
+  "impact_metrics": [
+    {"value": "9+", "label": "Years building communities"},
+    {"value": "200,000+", "label": "Learners reached"},
+    {"value": "4,600+", "label": "User-group RSVPs"},
+    {"value": "900+", "label": "Conference attendees"}
   ],
-  "github_username": "yashrajnayak",
-  "about": {
-    "paragraphs": [
-      "Developer and people person with 9+ years of experience building and scaling developer communities across India and APAC. I currently lead University Alliances and Student Programs for Databricks in India, helping build a stronger pipeline of data and AI talent across top institutions.",
-      "Previously, I supported MongoDB User Groups globally, contributed to GitHub Developer Relations programs in India, grew OutSystems' APAC community, scaled Progate's India community to 200,000+ learners, and worked on community programs at Skillenza. I am passionate about creating authentic spaces where developers can learn, collaborate, and thrive."
-    ]
-  },
+  "navigation": [
+    {"label": "Impact", "target": "impact"},
+    {"label": "Experience", "target": "experience"},
+    {"label": "Proof", "target": "proof"},
+    {"label": "Work", "target": "work"},
+    {"label": "Contact", "target": "contact"}
+  ],
   "projects": {
-    "title": "Latest Projects",
+    "title": "Selected impact",
     "items": [
       {
+        "id": "github-constellation-2024",
         "name": "GitHub Constellation 2024",
-        "date": "June 12, 2024",
-        "description": [
-          "GitHub's developer conference featuring a keynote by GitHub CEO Thomas Dohmke, 20+ speakers and 900+ in-person attendees.",
-          "Collaborated with external agencies and multiple teams within organization.",
-          "Managed end-to-end execution, including website management, venue logistics, emceeing, speakers and attendee engagement."
+        "date": "June 2024",
+        "role": "Program Manager, Developer Relations",
+        "summary": "Supported GitHub’s flagship Bengaluru developer conference from program planning through the on-site experience.",
+        "challenge": "Deliver a high-quality, locally relevant conference while coordinating agencies and teams across the organization.",
+        "actions": [
+          "Supported website management, venue logistics, speaker coordination, emceeing, and attendee engagement",
+          "Collaborated with external agencies and multiple internal teams",
+          "Helped deliver a program featuring 20+ speakers and a keynote by GitHub CEO Thomas Dohmke"
         ],
-        "picture": "assets/projects/GitHub_Constellation_2024.jpeg"
+        "outcomes": ["900+ in-person attendees", "A flagship event for India’s developer and open-source ecosystem"],
+        "featured": true,
+        "media": {"src": "assets/projects/GitHub_Constellation_2024.jpeg", "alt": "GitHub Constellation 2024 stage in Bengaluru", "fit": "contain"},
+        "links": [{"label": "View GitHub’s 2024 impact report", "url": "https://github.com/about/diversity/report"}]
       },
       {
-        "name": "GitTogether Meetups Automation System",
-        "date": "2024",
-        "description": [
-          "4-stage GitHub Actions pipeline with multi-repository orchestration and API integration",
-          "Automated issue creation, assignment, and lifecycle management with 80% reduction in manual overhead",
-          "Tech Stack: Node.js, GitHub Actions, GraphQL/REST APIs, YAML configuration management"
+        "id": "mongodb-user-groups",
+        "name": "MongoDB User Groups",
+        "date": "2025–2026",
+        "role": "Senior Program Manager, Developer Relations",
+        "summary": "Aligned and supported a global user-group program while helping local leaders build sustainable developer communities.",
+        "challenge": "Create consistent support for established groups while launching or reviving chapters in new regions.",
+        "actions": [
+          "Supported 40 existing MongoDB User Groups globally",
+          "Helped launch or revive chapters in Seoul, Abu Dhabi, Rio de Janeiro, and Cape Town",
+          "Served as the directly responsible individual for event operations across 24 user-group events"
         ],
-        "picture": "assets/projects/GitTogether_Meetups_Automation_System.png"
+        "outcomes": ["4,600+ RSVPs across 24 events", "A more consistent operating model for local community leaders"],
+        "featured": true,
+        "media": {"src": "assets/logos/MongoDB_Logo.svg", "alt": "MongoDB logo", "fit": "contain"},
+        "links": [{"label": "Explore MongoDB User Groups", "url": "https://www.mongodb.com/community/forums/t/about-the-user-groups-events-category/37"}]
       },
       {
-        "name": "GitTogethers Registration Web Platform",
+        "id": "gittogether-meetups-automation",
+        "name": "GitTogether Meetups Automation",
         "date": "2024",
-        "description": [
-          "Modern responsive web application for developer event registration and check-in management",
-          "GitHub API integration with smart event filtering, form validation, and mobile optimization",
-          "Tech Stack: Vanilla JavaScript (ES6), jQuery, CSS Grid/Flexbox, GitHub API"
+        "role": "Program manager and builder",
+        "summary": "Built a four-stage automation pipeline for repeatable, multi-repository meetup operations.",
+        "challenge": "Manual issue creation, assignment, and lifecycle tracking consumed time and introduced avoidable errors.",
+        "actions": [
+          "Orchestrated workflows across repositories with GitHub Actions",
+          "Integrated GitHub GraphQL and REST APIs with Node.js",
+          "Moved program configuration into reusable YAML"
         ],
-        "picture": "assets/projects/GitTogethers_Registration_Web_Platform.png",
-        "link": {
-          "url": "https://gittogethers.github.io/",
-          "title": "View Live Demo"
-        }
+        "outcomes": ["80% reduction in manual overhead", "More consistent issue creation, assignment, and lifecycle management"],
+        "featured": true,
+        "media": {"src": "assets/projects/GitTogether_Meetups_Automation_System.png", "alt": "Diagram of the GitTogether meetup automation system", "fit": "contain"},
+        "links": [{"label": "Explore GitTogethers", "url": "https://gittogethers.github.io/"}]
       }
     ]
   },
   "experience": {
-    "title": "Professional Experience",
+    "title": "Experience",
+    "visible_count": 3,
     "jobs": [
       {
         "company": "Databricks",
         "role": "University Alliances and Student Programs Lead, India",
-        "date": "Mar 2026 - Present",
+        "date": "Mar 2026 — Present",
         "responsibilities": [
-          "Own Databricks' university alliances and student programs strategy for India",
-          "Build partnerships with faculty, university leadership, and student communities to integrate Databricks into teaching, projects, and research",
-          "Design and execute scalable workshops, hackathons, and curriculum collaborations focused on Spark, Delta Lake, MLflow, and the Databricks Data Intelligence Platform"
+          "Own the university alliances and student programs strategy for India",
+          "Build partnerships with faculty, university leadership, and student communities",
+          "Design scalable workshops, hackathons, and curriculum collaborations focused on data and AI"
         ],
         "logo": "assets/logos/Databricks_Logo.svg",
         "logo_dark": "assets/logos/Databricks_Logo_White.svg"
@@ -110,11 +117,11 @@
       {
         "company": "MongoDB",
         "role": "Senior Program Manager, Developer Relations",
-        "date": "Mar 2025 - Feb 2026",
+        "date": "Mar 2025 — Feb 2026",
         "responsibilities": [
-          "Collaborated with regional teams and internal stakeholders to align the MongoDB User Groups program",
-          "Supported 40 existing MongoDB User Groups globally and launched or revived chapters in Seoul, Abu Dhabi, Rio de Janeiro, and Cape Town",
-          "Managed operations as the DRI for 24 user group events, totaling 4,600+ RSVPs"
+          "Aligned the MongoDB User Groups program with regional teams and internal stakeholders",
+          "Supported 40 groups globally and helped launch or revive four chapters",
+          "Owned operations for 24 events totaling 4,600+ RSVPs"
         ],
         "logo": "assets/logos/MongoDB_Logo.svg",
         "logo_dark": "assets/logos/MongoDB_Logo_White.svg"
@@ -122,11 +129,11 @@
       {
         "company": "GitHub",
         "role": "Program Manager, Developer Relations",
-        "date": "Mar 2024 - Feb 2025",
+        "date": "Mar 2024 — Feb 2025",
         "responsibilities": [
-          "Supported planning and execution of GitHub Constellation 2024, engaging 900+ in-person attendees in Bengaluru",
-          "Contributed to programs including the Global Meetups Program, GitHub Universe Recap, and GitHub Connect India",
-          "Developed processes and automations to scale GitTogethers across Bengaluru, Delhi NCR, Hyderabad, and Mumbai"
+          "Supported GitHub Constellation 2024 for 900+ in-person attendees in Bengaluru",
+          "Contributed to the Global Meetups Program, GitHub Universe Recap, and GitHub Connect India",
+          "Developed processes and automations for GitTogethers across four Indian cities"
         ],
         "logo": "assets/logos/GitHub_Logo.png",
         "logo_dark": "assets/logos/GitHub_Logo_White.png"
@@ -134,11 +141,11 @@
       {
         "company": "OutSystems",
         "role": "APAC Community Growth Manager",
-        "date": "Mar 2021 - Feb 2023",
+        "date": "Mar 2021 — Feb 2023",
         "responsibilities": [
-          "Expanded global community programs throughout Asia-Pacific",
-          "Led initiatives like #14DaysOfOutSystems Challenge and OutSystems Student Accelerator",
-          "Supported OutSystems User Group organizers across APAC to build strong local communities"
+          "Expanded developer community programs across Asia-Pacific",
+          "Led programs including #14DaysOfOutSystems and the Student Accelerator",
+          "Supported local user-group organizers across APAC"
         ],
         "logo": "assets/logos/OutSystems_Logo.png",
         "logo_dark": "assets/logos/OutSystems_Logo_White.png"
@@ -146,13 +153,11 @@
       {
         "company": "Progate",
         "role": "India Community Manager",
-        "date": "Mar 2018 - Feb 2021",
+        "date": "Mar 2018 — Feb 2021",
         "responsibilities": [
-          "Explored and built early-stage partnerships for Progate in India, finalizing academic partnerships with 15+ schools and universities",
-          "Helped this Japanese coding learning platform to grow userbase to 200,000+ learners in India",
-          "Established Community Partnership with Hacktoberfest 2020 and other non-profits",
-          "Organized 30+ Learning Jams across major Indian cities",
-          "Reached 6,000+ high school students through Hour of Code™ 2018 Campaign"
+          "Helped grow Progate’s India user base to 200,000+ learners",
+          "Built academic partnerships with 15+ schools and universities",
+          "Organized 30+ learning jams across major Indian cities"
         ],
         "logo": "assets/logos/Progate_Logo.png",
         "logo_dark": "assets/logos/Progate_Logo_White.png"
@@ -160,75 +165,66 @@
       {
         "company": "Skillenza",
         "role": "Community Manager",
-        "date": "Aug 2017 - Feb 2018",
+        "date": "Aug 2017 — Feb 2018",
         "responsibilities": [
-          "Worked alongside teams from DigitalOcean, AWS, Digital Domain, Société Générale, etc to plan and execute developer events across the country (both online and offline)",
-          "Helped in the execution of Hack2Innovate 2017, series of 7 deep-tech hackathons while working with teams from T-Hub, Microsoft, NVIDIA and PwC",
-          "Handled Skillenza's student developer engagement and supported 25+ hackathons in different campuses across the country"
+          "Planned and executed developer events with technology partners across India",
+          "Supported a seven-city deep-tech hackathon series",
+          "Led student developer engagement across 25+ campus hackathons"
         ],
         "logo": "assets/logos/Skillenza_Logo.png",
         "logo_dark": "assets/logos/Skillenza_Logo_White.png"
       }
     ]
   },
-  "skills": {
-    "title": "Skills & Technologies",
-    "categories": [
+  "proof": {
+    "title": "Capabilities & credentials",
+    "items": [
+      "Developer program strategy",
+      "University partnerships",
+      "Community systems",
+      "Technical enablement",
+      {"name": "GitHub Foundations", "url": "https://www.credly.com/badges/7754da79-07d9-4abe-9f9e-e0c9a84a34b4/"},
+      {"name": "GitHub Copilot", "url": "https://www.credly.com/badges/370d77b0-13a0-45a7-92ae-3326f64786be/"},
+      {"name": "Microsoft Applied Skills", "url": "https://learn.microsoft.com/api/credentials/share/en-in/yashrajnayak/962FF988EFFAE330?sharingId=7AC6735FC0CD4144"},
+      {"name": "Meta Certified Community Manager", "url": "https://www.credly.com/badges/9f1fd9c1-3469-47d0-ad43-2647f638d622/"}
+    ]
+  },
+  "open_source": {
+    "title": "Tools and open-source work",
+    "items": [
       {
-        "name": "Technical",
-        "items": [
-          "JavaScript and C#",
-          "React",
-          "CI/CD with GitHub Actions",
-          "Microsoft Azure",
-          "Technical Presentations"
-        ]
+        "name": "Developer portfolio engine",
+        "summary": "A beginner-friendly, schema-driven static portfolio generator with accessible defaults.",
+        "url": "https://github.com/yashrajnayak/developer-portfolio",
+        "stars": 96,
+        "language": "JavaScript"
       },
       {
-        "name": "Developer Relations",
-        "items": [
-          "Program Management",
-          "Developer Engagement",
-          "Developer Advocacy",
-          "User Research and Feedback",
-          "Community Building"
-        ]
+        "name": "GitTogethers registration platform",
+        "summary": "A responsive event registration and check-in experience with GitHub API integration.",
+        "url": "https://gittogethers.github.io/",
+        "language": "JavaScript"
       },
       {
-        "name": "Certifications",
-        "items": [
-          {
-            "name": "GitHub Foundations",
-            "url": "https://www.credly.com/badges/7754da79-07d9-4abe-9f9e-e0c9a84a34b4/"
-          },
-          {
-            "name": "GitHub Copilot",
-            "url": "https://www.credly.com/badges/370d77b0-13a0-45a7-92ae-3326f64786be/"
-          },
-          {
-            "name": "Microsoft Applied Skills: Accelerate App Development by using GitHub Copilot",
-            "url": "https://learn.microsoft.com/api/credentials/share/en-in/yashrajnayak/962FF988EFFAE330?sharingId=7AC6735FC0CD4144"
-          },
-          {
-            "name": "Meta Certified Community Manager",
-            "url": "https://www.credly.com/badges/9f1fd9c1-3469-47d0-ad43-2647f638d622/"
-          }
-        ]
+        "name": "Connecticut",
+        "summary": "A developer-networking tool that analyzes and visualizes connections between GitHub users.",
+        "url": "https://github.com/yashrajnayak/connecticut",
+        "language": "JavaScript"
       }
     ]
   },
-  "github_projects": {
-    "title": "Most Starred GitHub Projects",
-    "source_url": "https://raw.githubusercontent.com/yashrajnayak/yashrajnayak/master/data/top-repos.json",
-    "max_repos": 6,
-    "excluded_repos": [
-      "yashrajnayak"
+  "contact": {
+    "heading": "Let’s build programs developers remember.",
+    "summary": "Available for speaking, partnerships, and conversations about developer education and community programs.",
+    "primary_cta": {"label": "Connect on LinkedIn", "url": "https://www.linkedin.com/in/yashrajnayak/"},
+    "social_links": [
+      {"name": "GitHub", "url": "https://github.com/yashrajnayak"},
+      {"name": "LinkedIn", "url": "https://www.linkedin.com/in/yashrajnayak/"}
     ]
   },
   "footer": {
-    "show_social_links": true,
+    "copyright": "Yashraj Nayak",
     "show_built_with": true,
-    "built_with_text": "Built with ❤️ using vanilla JavaScript",
-    "tagline": "Let's connect and build something amazing together!"
+    "built_with_text": "Built with the Developer Portfolio v2 engine."
   }
 }
