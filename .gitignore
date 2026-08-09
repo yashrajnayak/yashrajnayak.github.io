@@ -9,10 +9,6 @@ Thumbs.db
 
 # Dependencies
 node_modules/
-.portfolio-engine/
-dist/
-playwright-report/
-test-results/
 package-lock.json
 
 # IDE/Editor specific
@@ -23,6 +19,7 @@ package-lock.json
 *~
 
 # Build output
+dist/
 build/
 out/
 

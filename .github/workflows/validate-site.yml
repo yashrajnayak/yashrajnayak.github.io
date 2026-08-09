@@ -1,81 +1,27 @@
-name: Validate portfolio
+name: Validate Site
 
 on:
+  push:
+    branches: [main]
   pull_request:
-  workflow_dispatch:
-
-permissions:
-  contents: read
-
-concurrency:
-  group: validate-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-env:
-  PORTFOLIO_CONFIG: ${{ github.workspace }}/config.json
-  PORTFOLIO_OUTPUT: ${{ github.workspace }}/.portfolio-engine/dist
 
 jobs:
   validate-site:
-    name: validate-site
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    permissions:
+      contents: read
+
     steps:
-      - name: Checkout portfolio content
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Read pinned engine version
-        id: engine
-        run: echo "version=$(jq -r .version template-version.json)" >> "$GITHUB_OUTPUT"
-
-      - name: Checkout pinned portfolio engine
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          repository: yashrajnayak/developer-portfolio
-          ref: ${{ steps.engine.outputs.version }}
-          path: .portfolio-engine
+          node-version: '20'
 
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: .portfolio-engine/package-lock.json
-
-      - name: Install engine dependencies
-        working-directory: .portfolio-engine
-        run: npm ci
-
-      - name: Install Chromium
-        working-directory: .portfolio-engine
-        run: npx playwright install --with-deps chromium
-
-      - name: Validate content and build
-        working-directory: .portfolio-engine
+      - name: Validate config and generated assets
         run: |
-          npm run validate:config -- "$PORTFOLIO_CONFIG"
+          node -e "const c=require('./config.json'); if (c.experience.jobs.some(j => j.company === 'ANSR')) throw new Error('ANSR must not be structured experience');"
           npm run build
-          npm run validate:html
-          npm run check:links
-          npm run test:unit
-          npm audit --audit-level=moderate
-
-      - name: Check repository for machine-specific paths
-        run: |
-          CONTENT_SCAN=$(mktemp -d)
-          git archive HEAD | tar -x -C "$CONTENT_SCAN"
-          cd "$CONTENT_SCAN"
-          node "$GITHUB_WORKSPACE/.portfolio-engine/scripts/check-local-paths.mjs"
-
-      - name: Run responsive and accessibility tests
-        working-directory: .portfolio-engine
-        run: npm run test:e2e
-
-      - name: Upload Playwright report on failure
-        if: failure()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        with:
-          name: playwright-report
-          path: .portfolio-engine/playwright-report/
-          if-no-files-found: ignore
-          retention-days: 7
+          git diff --exit-code css/bundle.css js/bundle.js

@@ -1,86 +1,92 @@
-name: Update GitHub profile README
+name: Update Profile README from Config
 
 on:
   push:
     branches: [main]
-    paths: [config.json, template-version.json]
+    paths: ['config.json']
   workflow_dispatch:
 
-permissions:
-  contents: read
-
-concurrency:
-  group: profile-readme
-  cancel-in-progress: false
-
-env:
-  PORTFOLIO_CONFIG: ${{ github.workspace }}/config.json
-  PORTFOLIO_OUTPUT: ${{ github.workspace }}/.portfolio-engine/dist
-
 jobs:
-  update-profile:
+  update-profile-readme:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    permissions:
+      contents: read
+    
     steps:
-      - name: Checkout portfolio content
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-
-      - name: Read pinned engine version
-        id: engine
-        run: echo "version=$(jq -r .version template-version.json)" >> "$GITHUB_OUTPUT"
-
-      - name: Checkout pinned portfolio engine
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Checkout current repository
+        uses: actions/checkout@v4
         with:
-          repository: yashrajnayak/developer-portfolio
-          ref: ${{ steps.engine.outputs.version }}
-          path: .portfolio-engine
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+      - name: Validate config.json
+        run: |
+          echo "🔍 Validating config.json..."
+          if [ ! -f "config.json" ]; then
+            echo "❌ config.json not found"
+            exit 1
+          fi
+          
+          if ! jq empty config.json 2>/dev/null; then
+            echo "❌ config.json is not valid JSON"
+            exit 1
+          fi
+          
+          echo "✅ config.json is valid"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: .portfolio-engine/package-lock.json
-
-      - name: Install engine dependencies
-        working-directory: .portfolio-engine
-        run: npm ci
-
-      - name: Generate profile README from schema
-        working-directory: .portfolio-engine
-        run: npm run build
+          node-version: '18'
 
       - name: Check profile repository token
-        id: token
+        id: profile-token
         env:
           GH_TOKEN: ${{ secrets.PROFILE_REPO_TOKEN }}
         run: |
-          if [ -n "$GH_TOKEN" ] && gh api repos/yashrajnayak/yashrajnayak >/dev/null 2>&1; then
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::warning::PROFILE_REPO_TOKEN is not configured. Skipping profile README update."
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if gh api repos/yashrajnayak/yashrajnayak >/dev/null 2>&1; then
             echo "available=true" >> "$GITHUB_OUTPUT"
           else
-            echo "::warning::PROFILE_REPO_TOKEN is unavailable; skipped profile README sync."
+            echo "::warning::PROFILE_REPO_TOKEN is invalid or cannot access yashrajnayak/yashrajnayak. Skipping profile README update."
             echo "available=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Checkout profile repository
-        if: steps.token.outputs.available == 'true'
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        if: steps.profile-token.outputs.available == 'true'
+        uses: actions/checkout@v4
         with:
           repository: yashrajnayak/yashrajnayak
           token: ${{ secrets.PROFILE_REPO_TOKEN }}
           path: profile-repo
 
-      - name: Preserve live repository feed and update README
-        if: steps.token.outputs.available == 'true'
-        run: node .github/scripts/update-profile-readme.mjs .portfolio-engine/dist/profile-readme.md profile-repo/README.md
-
-      - name: Commit generated allowlist
-        if: steps.token.outputs.available == 'true'
-        working-directory: profile-repo
+      - name: Generate Profile README
+        if: steps.profile-token.outputs.available == 'true'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- README.md
-          git diff --cached --quiet || git commit -m "Update profile README from portfolio schema"
+          echo "🚀 Generating Profile README from config.json..."
+          node .github/workflows/update-profile-readme.js
+
+      - name: Check for changes in profile repo
+        if: steps.profile-token.outputs.available == 'true'
+        id: verify-changed-files
+        run: |
+          cd profile-repo
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes to profile repository
+        if: steps.profile-token.outputs.available == 'true' && steps.verify-changed-files.outputs.changed == 'true'
+        run: |
+          cd profile-repo
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "🤖 Auto-update README.md from portfolio config.json"
           git push
