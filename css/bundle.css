@@ -1276,3 +1276,8 @@ figcaption {
 }
 
 .name-button { user-select: none; -webkit-user-select: none; }
+
+.title-letter.hovered-letter { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .title-letter.hovered-letter { opacity: 1; }
+}
