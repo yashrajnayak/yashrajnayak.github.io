@@ -1,16 +1,14 @@
-name: Sync Favicons From GitHub Avatar
+name: Generate Monogram Favicons
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '23 3 * * 1'
   push:
     branches: [main]
-    paths: ['config.json']
+    paths: ['scripts/sync-favicons.mjs']
 
 jobs:
   sync-favicons:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: write
 
@@ -26,8 +24,6 @@ jobs:
           node-version: '24'
 
       - name: Sync favicon assets
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run sync:favicons
 
       - name: Check for changes
@@ -45,5 +41,5 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add assets/favicons index.html site.webmanifest
-          git commit -m "🤖 Sync favicons with GitHub avatar"
+          git commit -m "🤖 Regenerate YN monogram favicons"
           git push

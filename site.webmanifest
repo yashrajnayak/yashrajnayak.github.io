@@ -1,20 +1,20 @@
 {
   "name": "Yashraj Nayak",
   "short_name": "Yashraj Nayak",
-  "description": "Developer Portfolio of Yashraj Nayak - Program Manager, Developer Relations",
+  "description": "Developer programs, communities and tools by Yashraj Nayak",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#2563eb",
+  "background_color": "#f2efeb",
+  "theme_color": "#28191e",
   "icons": [
     {
-      "src": "assets/favicons/favicon-192x192.png?v=6ed75eb1ee",
+      "src": "assets/favicons/favicon-192x192.png?v=bd5d6906ec",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "assets/favicons/favicon-512x512.png?v=6ed75eb1ee",
+      "src": "assets/favicons/favicon-512x512.png?v=bd5d6906ec",
       "sizes": "512x512",
       "type": "image/png"
     }

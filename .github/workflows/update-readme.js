@@ -3,6 +3,12 @@
 const fs = require('fs');
 const path = require('path');
 
+if (fs.readFileSync(path.join(__dirname, '../../index.html'), 'utf8').includes('id="name-particles"')) {
+  console.log('Personal atlas README is maintained alongside its source; no generation needed.');
+  process.exit(0);
+}
+
+
 /**
  * Generate README.md content from config.json
  * This script can be run locally or in GitHub Actions
