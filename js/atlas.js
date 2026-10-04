@@ -29,46 +29,61 @@ const canvas = document.getElementById("name-particles");
 nameButton.disabled = false;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 let frame = 0;
+let titleMode = "idle";
+const wordmark = nameButton.querySelector(".wordmark");
+// A zero-size inline box exposes the browser's real text baseline. Centering
+// the canvas ink bounds instead makes the title jump when the effect starts.
+const baselineProbe = document.createElement("span");
+baselineProbe.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
+baselineProbe.setAttribute("aria-hidden", "true");
+wordmark.append(baselineProbe);
+const hoverPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 function stopParticles() {
   cancelAnimationFrame(frame);
+  titleMode = "idle";
   nameButton.classList.remove("playing");
-  const context = canvas.getContext("2d");
-  context?.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
 }
-nameButton.addEventListener("click", () => {
-  if (reduceMotion.matches || nameButton.classList.contains("playing")) return;
-  const text = nameButton.querySelector(".wordmark");
-  const rect = nameButton.getBoundingClientRect();
-  const style = getComputedStyle(text);
-  canvas.width = Math.ceil(rect.width);
-  canvas.height = Math.ceil(rect.height);
+function prepareTitle() {
+  const rect = canvas.getBoundingClientRect();
+  const textRect = wordmark.getBoundingClientRect();
+  const style = getComputedStyle(wordmark);
+  const scale = window.devicePixelRatio || 1;
+  canvas.width = Math.round(rect.width * scale);
+  canvas.height = Math.round(rect.height * scale);
   const context = canvas.getContext("2d");
-  if (!context) return;
+  if (!context) return null;
+  context.setTransform(canvas.width / rect.width, 0, 0, canvas.height / rect.height, 0, 0);
   context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
   context.letterSpacing = style.letterSpacing;
   context.textBaseline = "alphabetic";
   context.fillStyle = style.color;
-  const metrics = context.measureText(text.textContent);
-  const baseline =
-    (canvas.height +
-      metrics.actualBoundingBoxAscent -
-      metrics.actualBoundingBoxDescent) /
-    2;
-  context.fillText(text.textContent, 0, baseline);
+  context.strokeStyle = style.color;
+  context.lineWidth = 1;
+  const x = textRect.left - rect.left;
+  const baseline = baselineProbe.getBoundingClientRect().top - rect.top;
+  const label = wordmark.textContent;
+  context.fillText(label, x, baseline);
+  return { context, rect, x, baseline, label };
+}
+nameButton.addEventListener("click", () => {
+  if (reduceMotion.matches || titleMode === "click") return;
+  stopParticles();
+  const title = prepareTitle();
+  if (!title) return;
+  const { context, rect } = title;
   const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
   const dots = [];
   const spacing = rect.width < 450 ? 3 : 4;
-  for (let y = 0; y < canvas.height; y += spacing) {
-    for (let x = 0; x < canvas.width; x += spacing) {
-      if (pixels[(y * canvas.width + x) * 4 + 3] > 120)
-        dots.push({
-          x,
-          y,
-          dx: (Math.random() - 0.5) * 80,
-          dy: (Math.random() - 0.5) * 70,
-        });
+  const sx = canvas.width / rect.width;
+  const sy = canvas.height / rect.height;
+  for (let y = 0; y < rect.height; y += spacing) {
+    for (let x = 0; x < rect.width; x += spacing) {
+      if (pixels[(Math.floor(y * sy) * canvas.width + Math.floor(x * sx)) * 4 + 3] > 120)
+        dots.push({ x, y, dx: (Math.random() - 0.5) * 80, dy: (Math.random() - 0.5) * 70 });
     }
   }
+  titleMode = "click";
   nameButton.classList.add("playing");
   const start = performance.now();
   function draw(now) {
@@ -78,18 +93,65 @@ nameButton.addEventListener("click", () => {
       return;
     }
     const spread = Math.sin(progress * Math.PI);
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.clearRect(0, 0, rect.width, rect.height);
     for (const dot of dots)
-      context.fillRect(
-        dot.x + dot.dx * spread,
-        dot.y + dot.dy * spread,
-        spacing * 0.8,
-        spacing * 0.8,
-      );
+      context.fillRect(dot.x + dot.dx * spread, dot.y + dot.dy * spread, spacing * 0.8, spacing * 0.8);
     frame = requestAnimationFrame(draw);
   }
   frame = requestAnimationFrame(draw);
 });
+nameButton.addEventListener("pointerenter", () => {
+  if (reduceMotion.matches || !hoverPointer.matches || titleMode === "click") return;
+  stopParticles();
+  const title = prepareTitle();
+  if (!title) return;
+  const { context, rect, x, baseline, label } = title;
+  // Sample points on the actual glyph contours, retaining the site's font.
+  const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+  const sx = canvas.width / rect.width;
+  const sy = canvas.height / rect.height;
+  const points = [];
+  const step = Math.max(14, rect.width / 55);
+  for (let px = 0; px < rect.width; px += step) {
+    let first = -1;
+    let last = -1;
+    for (let py = 0; py < rect.height; py++) {
+      if (pixels[(Math.floor(py * sy) * canvas.width + Math.floor(px * sx)) * 4 + 3] > 120) {
+        if (first < 0) first = py;
+        last = py;
+      }
+    }
+    if (first >= 0) {
+      points.push({ x: px, y: first });
+      if (last - first > step) points.push({ x: px, y: last });
+    }
+  }
+  titleMode = "hover";
+  nameButton.classList.add("playing");
+  const start = performance.now();
+  function drawHover(now) {
+    const progress = Math.min((now - start) / 900, 1);
+    context.clearRect(0, 0, rect.width, rect.height);
+    context.globalAlpha = 1;
+    context.strokeText(label, x, baseline);
+    context.globalAlpha = 1 - Math.min(progress * 3, 1);
+    context.fillText(label, x, baseline);
+    for (const point of points) {
+      const phase = Math.max(0, Math.min((progress - point.x / rect.width * 0.45) * 3, 1));
+      context.globalAlpha = phase;
+      context.beginPath();
+      context.arc(point.x, point.y, 1.4 + Math.sin(phase * Math.PI) * 2, 0, Math.PI * 2);
+      context.fill();
+    }
+    context.globalAlpha = 1;
+    if (progress < 1) frame = requestAnimationFrame(drawHover);
+  }
+  frame = requestAnimationFrame(drawHover);
+});
+nameButton.addEventListener("pointerleave", () => {
+  if (titleMode === "hover") stopParticles();
+});
+window.addEventListener("resize", stopParticles);
 reduceMotion.addEventListener("change", stopParticles);
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) stopParticles();
