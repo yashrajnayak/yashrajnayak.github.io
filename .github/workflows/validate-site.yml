@@ -24,4 +24,5 @@ jobs:
         run: |
           node -e "const c=require('./config.json'); if (c.experience.jobs.some(j => j.company === 'ANSR')) throw new Error('ANSR must not be structured experience');"
           npm run build
+          npm run check
           git diff --exit-code css/bundle.css js/bundle.js

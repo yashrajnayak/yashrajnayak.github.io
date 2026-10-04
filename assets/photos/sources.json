@@ -1,0 +1,42 @@
+{
+  "retrieved": "2026-10-03",
+  "timezone": "America/Los_Angeles",
+  "method": "LinkedIn-delivered derivatives plus the unchanged high-resolution Codex group original from the previously retrieved photo archive. Per-file records identify each source.",
+  "rights": "No ownership transfer or blanket reuse license inferred. Personal-site local preview; preserve publisher attribution. Photographer names not supplied in the observed posts.",
+  "photos": [
+    {
+      "file": "aarambha-2026.jpg",
+      "source": "https://www.linkedin.com/company/blrtechweek/posts/",
+      "context": "Aarambha recap, reposted by Yashraj; visible as 1d old during retrieval.",
+      "publisher": "Bengaluru Tech Week",
+      "dimensions": "800x450"
+    },
+    {
+      "file": "ai-conference-2026.jpg",
+      "source": "https://www.linkedin.com/feed/update/urn:li:activity:7511888206083321856/",
+      "context": "The AI Conference SF; Yashraj post, visible as 1d old during retrieval.",
+      "publisher": "Yashraj Nayak",
+      "dimensions": "480x640"
+    },
+    {
+      "file": "ai-conference-team-2026.jpg",
+      "source": "https://www.linkedin.com/feed/update/urn:li:activity:7511888206083321856/",
+      "context": "Companion photograph from the same post; retained as an alternate, not displayed.",
+      "publisher": "Yashraj Nayak",
+      "dimensions": "480x360"
+    },
+    {
+      "file": "codex-ambassadors-2026.jpg",
+      "source": "https://www.linkedin.com/feed/update/urn:li:activity:7510543162411634689/",
+      "context": "OpenAI Dev Day post, visible as 4d old during retrieval.",
+      "publisher": "Yashraj Nayak",
+      "dimensions": "800x529"
+    },
+    {
+      "file": "codex-ambassadors-2026-original.jpg",
+      "source": "Previously retrieved Codex Ambassadors photo archive: 00003573-PHOTO-2026-09-28-23-15-15.jpg",
+      "context": "Higher-resolution original group photograph from the same gathering; copied unchanged, no generated facial detail.",
+      "dimensions": "3840x2560"
+    }
+  ]
+}

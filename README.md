@@ -1,47 +1,61 @@
-# Yashraj Nayak - Developer Portfolio
+# Yashraj Nayak — personal atlas
 
-<div align="left">
-  
-[![Portfolio](https://img.shields.io/badge/🌐_Visit_Portfolio-Live-brightgreen?style=for-the-badge)](https://yashrajnayak.com)
-[![GitHub](https://img.shields.io/badge/GitHub-Profile-181717?style=for-the-badge&logo=github)](https://github.com/yashrajnayak)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/yashrajnayak/)
+A personal website about developer programs, communities and useful software. The redesign uses a deep plum typographic header matching the contact section, a warm paper palette, original contour artwork, a selectable project map, recent event photography and an optional particle wordmark.
 
-</div>
+The public site is [yashrajnayak.com](https://yashrajnayak.com). GitHub Pages publishes the root of the `main` branch to this custom domain.
 
-The live portfolio includes detailed professional experience, technical skills and certifications, featured projects and achievements, and contact information.
+## Develop
 
-## ✨ Features
+Requires Node.js for asset bundling and Python 3 for the example preview server.
 
-- 🎨 **Modern Design** - Clean, responsive interface with dark/light theme support
-- 🚀 **Performance Optimized** - Fast loading with vanilla JavaScript and a reusable most-starred repository feed
-- 🔍 **SEO & Social Ready** - Static meta tags and resource preloading for better visibility
-- ♿ **Accessible** - Built with semantic HTML `<details>`/`<summary>` for better screen reader support
-- 📱 **Mobile First** - Fully responsive across all devices
-- 🔄 **Auto-Updated** - Content dynamically generated from `config.json` and the GitHub profile repository feed
-- 🌓 **Dark/Light Mode** - Smooth transitions with persistent preferences
-- 🔗 **Dynamic Social Links** - Configurable social media and professional links
-- 🔝 **Smooth Navigation** - Integrated Scroll-to-Top feature
-- 📑 **Professional Print** - Custom print stylesheet for beautiful PDF exports
-- ⚙️ **Zero Code Changes** - Everything configured through JSON
+```sh
+npm run build
+npm run check
+npm run sync:favicons:check
+python3 -m http.server 8765 --bind 127.0.0.1
+```
 
-## 📈 GitHub Stats
+Open `http://127.0.0.1:8765`. Edit `index.html` for content, `css/atlas.css` for presentation and `js/atlas.js` for optional interactions. Rebuild and reload after edits. The site has no React runtime or package dependencies.
 
-<div align="left">
+## Architecture
 
-![GitHub Stats](https://github-readme-stats-fast.vercel.app/api?username=yashrajnayak&theme=dark&hide_border=true&include_all_commits=true&count_private=true)
+```mermaid
+flowchart LR
+  HTML[Static index.html] --> Browser[Browser]
+  CSS[fonts.css + atlas.css] --> Build[build-assets.mjs]
+  JS[atlas.js] --> Build
+  Build --> Bundles[CSS and JS bundles]
+  Bundles --> Browser
+  Photos[Local photos + native video] --> Browser
+  Generator[YN monogram generator] --> Favicon[Favicon build]
+  Favicon --> Icons[Local favicon assets]
+  Icons --> Browser
+```
 
-![Top Languages](https://github-readme-stats-fast.vercel.app/api/top-langs/?username=yashrajnayak&theme=dark&hide_border=true&include_all_commits=true&count_private=true&layout=compact)
+All essential content and links are in HTML. JavaScript enhances the project selector, name animation and native video controls. The animation stops when the page becomes hidden and respects reduced motion. No GitHub API request or LinkedIn image hotlink is needed to render the homepage.
 
-</div>
+Legacy section-manager sources and historical content configuration remain in the repository as reference; they are not included in the current page bundles. The active content source is `index.html`.
 
-## 🤝 Connect
+## Images and fonts
 
-Let's connect and build something amazing together!
+- Photos are stored in `assets/photos/`. `sources.json` records publisher, public source, observed context and delivered resolution. Source records are maintained with the assets; there is no public credits page.
+- The Codex group image is an unchanged 3840 × 2560 original from the existing photo archive. Other photos are LinkedIn-delivered derivatives.
+- `assets/video/` contains the exact Bengaluru Tech Week highlights, downloaded through the owning channel’s YouTube Studio controls at 720p. The video appears once, in the Bengaluru Tech Week story; the project selector uses a still photograph. A native player provides playback without YouTube overlays; `source.json` records provenance.
+- `assets/atlas-contours.svg` is original abstract contour artwork, not real geographic data.
+- Manrope is self-hosted under the SIL Open Font License, included in `assets/fonts/OFL.txt`.
 
-- 🌐 **Portfolio**: [https://yashrajnayak.com](https://yashrajnayak.com)
-- 💻 **GitHub**: [https://github.com/yashrajnayak](https://github.com/yashrajnayak)
-- 🔗 **LinkedIn**: [https://www.linkedin.com/in/yashrajnayak/](https://www.linkedin.com/in/yashrajnayak/)
+## Favicon automation
 
----
+`scripts/sync-favicons.mjs` generates a geometric YN monogram in SVG, PNG and ICO formats without network access or a portrait. The workflow runs on demand and when the generator changes. Cache-busting URLs are updated deterministically.
 
-*Based on [portfolio template](https://github.com/yashrajnayak/developer-portfolio) originally created by [Yashraj Nayak](https://github.com/yashrajnayak)*
+## Validation and release
+
+`npm run check` verifies local asset references, fragment destinations, metadata, image attributes, photo credit records and regenerated bundle consistency. Browser checks should cover phone, tablet and desktop widths, keyboard selection, native video playback and pause controls, the name effect and console errors. A static check is not a full accessibility or performance audit.
+
+Run the build and validation commands above before committing. Push approved releases to `main`, then verify the GitHub Pages build and the live domain. `CNAME` preserves the custom domain.
+
+## Profile README
+
+`.github/workflows/update-profile-readme.js` generates the companion GitHub profile README with current APJ student-programs, Bengaluru Tech Week and Codex work. It preserves the profile repository's `TOP-REPOS` markers and ranked repository section. The cross-repository workflow needs `PROFILE_REPO_TOKEN`; it skips the update if that credential is unavailable.
+
+The site README is maintained directly. Its legacy config-based generator leaves this atlas version unchanged.

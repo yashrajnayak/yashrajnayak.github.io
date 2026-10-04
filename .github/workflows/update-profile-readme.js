@@ -135,7 +135,7 @@ function generateSocialBadges(config) {
 function generateProfileReadme(config, options = {}) {
   const username = config.github_username || 'yashrajnayak';
   const name = config.header?.greeting || 'Yashraj Nayak';
-  const role = config.header?.tagline || 'Program Manager, Developer Relations';
+  const role = 'Student Programs (APJ)';
   const company = currentCompany(config);
   const profileRepoDir = options.profileRepoDir || path.join(process.cwd(), 'profile-repo');
 
@@ -143,7 +143,11 @@ function generateProfileReadme(config, options = {}) {
 
 # Hi, I'm ${name}
 
-${role} at ${company}. I work at the intersection of developer communities, data and AI education, university programs, and practical tooling that helps teams run better developer experiences.
+${role} at ${company}. Co-founder of Bengaluru Tech Week. Codex Ambassador.
+
+I bring developers together to learn, build and share what works. My work connects developer education, community programs and useful software.
+
+[Explore my personal website →](https://yashrajnayak.com/)
 
 <div align="left">
 
@@ -153,33 +157,21 @@ ${generateSocialBadges(config)}
 
 ## About
 
-- I lead University Alliances and Student Programs for ${company} in India, helping build a stronger pipeline of data and AI talent across institutions.
-- I have 9+ years of experience building and scaling developer communities across India and APAC.
-- Previously, I supported MongoDB User Groups globally, contributed to GitHub Developer Relations programs in India, grew OutSystems' APAC community, and helped Progate reach 200,000+ learners in India.
-- I enjoy turning repeatable community operations into lightweight tools, automations, playbooks, and products.
-- Based in Bangalore, India.
+- I work on student programs across APJ at ${company}, connecting students with the possibilities of data and AI.
+- I co-founded [Bengaluru Tech Week](https://bengalurutechweek.com/), a citywide week of independently hosted events.
+- As a Codex Ambassador, I host meetups and hackathons in Bengaluru and share what I learn while building with AI.
+- Previously: developer relations at MongoDB and GitHub, community growth at OutSystems, and community programs at Progate and Skillenza.
+- Based in Bengaluru, India.
 
-## What I Work With
+## Current Work
 
-\`\`\`javascript
-const yashraj = {
-  currentFocus: ['Databricks', 'University Alliances', 'Student Programs', 'Data + AI education'],
-  devRel: ['Program Management', 'Developer Engagement', 'Community Building', 'Technical Events'],
-  technical: ['JavaScript', 'React', 'C#', 'GitHub Actions', 'Microsoft Azure'],
-  languages: ['English', 'Hindi']
-};
-\`\`\`
+- **Developer education:** student programs, campus communities and hands-on learning. I helped build and run [Bharat Bricks Hacks](https://bharatbricks.org/) across five campuses in India.
+- **Community gatherings:** bringing hosts and builders together through Bengaluru Tech Week and Codex events.
+- **Useful software:** a [developer portfolio starter](https://github.com/yashrajnayak/developer-portfolio), [GitHub connection explorer](https://github.com/yashrajnayak/connecticut), and [event registration tools](https://gittogethers.github.io/).
 
 ## Most Starred Repos
 
 ${topReposSection(profileRepoDir)}
-
-## Selected DevRel Work
-
-- **GitHub Constellation 2024** - supported GitHub's Bengaluru developer conference with 20+ speakers and 900+ in-person attendees.
-- **GitTogether Meetups Automation System** - built a GitHub Actions pipeline for multi-repository event operations, issue creation, assignment, and lifecycle tracking.
-- **GitTogethers Registration Web Platform** - built a responsive event registration and check-in platform with GitHub API integration.
-- **MongoDB User Groups** - supported 40 existing user groups globally and helped launch or revive chapters in Seoul, Abu Dhabi, Rio de Janeiro, and Cape Town.
 
 ## Certifications
 
