@@ -44,6 +44,8 @@ for (const page of pages) {
 }
 const html = readFileSync("index.html", "utf8");
 assert(html.includes("https://yashrajnayak.com/"), "Canonical domain missing");
+assert(!/[↗↘]/u.test(html), "Use drawn SVG arrows to avoid emoji rendering");
+assert.equal([...html.matchAll(/<video\b/g)].length, 1, "Show the highlights video only once");
 const person = JSON.parse(
   html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1],
 );
