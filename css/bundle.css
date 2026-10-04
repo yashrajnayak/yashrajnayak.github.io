@@ -281,19 +281,19 @@ nav a:hover,
   background: var(--signal);
   box-shadow: 0 0 0 6px #eb57441c;
 }
-.pin-btw {
+.pin-0 {
   top: 23%;
   left: 8%;
 }
-.pin-education {
+.pin-1 {
   top: 4%;
   right: 4%;
 }
-.pin-codex {
+.pin-2 {
   top: 70%;
   left: 19%;
 }
-.pin-tools {
+.pin-3 {
   top: 51%;
   right: 0;
 }
@@ -638,19 +638,19 @@ figcaption {
     grid-template-columns: 1fr 320px;
     gap: 24px;
   }
-  .pin-btw {
+  .pin-0 {
     left: 0;
     top: 12%;
   }
-  .pin-education {
+  .pin-1 {
     right: 0;
     top: 37%;
   }
-  .pin-codex {
+  .pin-2 {
     left: 0;
     top: 66%;
   }
-  .pin-tools {
+  .pin-3 {
     right: 0;
     top: 91%;
   }
@@ -1263,3 +1263,8 @@ figcaption {
   .company-logo img { max-width: 122px; max-height: 27px; }
   .story-side p:not(.large-copy) + p { display: none; }
 }
+
+.profile-links { display:flex; gap:24px 40px; align-items:baseline; flex-wrap:wrap; }
+.profile-download p { font:10px/1.6 var(--mono); color:var(--muted); margin-top:10px; }
+.site-header nav a:not(:last-child) .link-icon { display:none; }
+@media (min-width:761px) { .map-nodes:has(.map-pin:nth-child(5)) { display:grid; grid-template-columns:1fr 1fr; gap:12px; align-content:center; } .map-nodes:has(.map-pin:nth-child(5)) .map-pin { position:static; } }

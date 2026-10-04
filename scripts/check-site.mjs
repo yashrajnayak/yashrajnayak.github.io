@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 const root = process.cwd();
+const config = JSON.parse(readFileSync("config.json", "utf8"));
 const pages = ["index.html"];
 let checked = 0;
 for (const page of pages) {
@@ -43,14 +44,14 @@ for (const page of pages) {
   }
 }
 const html = readFileSync("index.html", "utf8");
-assert(html.includes("https://yashrajnayak.com/"), "Canonical domain missing");
+assert(html.includes(config.site.url), "Canonical domain missing");
 assert(!/[↗↘]/u.test(html), "Use drawn SVG arrows to avoid emoji rendering");
 assert.equal([...html.matchAll(/<video\b/g)].length, 1, "Show the highlights video only once");
 const person = JSON.parse(
   html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1],
 );
-assert.equal(person.name, "Yashraj Nayak");
-assert.equal(person.worksFor.name, "Databricks");
+assert.equal(person.name, config.site.name);
+assert.equal(person.worksFor.name, config.person.worksFor.name);
 for (const [output, inputs] of [
   ["css/bundle.css", ["css/fonts.css", "css/atlas.css"]],
   ["js/bundle.js", ["js/atlas.js"]],
@@ -100,7 +101,7 @@ for (const [tag] of html.matchAll(/<meta\b[^>]*>/g)) {
 const canonical = html.match(/rel="canonical" href="([^"]+)"/)[1];
 assert.equal(meta.get('og:url'), canonical);
 assert.equal(meta.get('twitter:url'), canonical);
-assert.equal(meta.get('og:site_name'), 'Yashraj Nayak');
+assert.equal(meta.get('og:site_name'), config.site.name);
 assert.equal(meta.get('twitter:card'), 'summary_large_image');
 assert.equal(meta.get('description'), meta.get('og:description'));
 assert.equal(meta.get('og:description'), meta.get('twitter:description'));

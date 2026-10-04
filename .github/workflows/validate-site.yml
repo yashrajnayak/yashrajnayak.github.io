@@ -1,28 +1,22 @@
 name: Validate Site
-
 on:
   push:
     branches: [main]
   pull_request:
-
 jobs:
   validate-site:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-
-      - name: Validate config and generated assets
+          node-version: '24'
+      - name: Validate config, rendering and generated assets
         run: |
-          node -e "const c=require('./config.json'); if (c.experience.jobs.some(j => j.company === 'ANSR')) throw new Error('ANSR must not be structured experience');"
+          npm run sync:favicons
           npm run build
           npm run check
-          git diff --exit-code css/bundle.css js/bundle.js
+          npm run sync:favicons:check
+          npm test
