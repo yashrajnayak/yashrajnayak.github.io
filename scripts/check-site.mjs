@@ -87,3 +87,37 @@ for (const file of ["css/atlas.css", "css/fonts.css"]) {
 console.log(
   `Validated ${pages.length} pages, ${checked} local references, metadata, image attributes, ${photos.photos.length} photo sources and bundle consistency.`,
 );
+
+// Social previews must reference the actual, crawlable landscape asset.
+const meta = new Map();
+for (const [tag] of html.matchAll(/<meta\b[^>]*>/g)) {
+  const key = tag.match(/(?:name|property)="([^"]+)"/)?.[1];
+  if (!key) continue;
+  assert(!meta.has(key), `Duplicate metadata: ${key}`);
+  // Theme colors intentionally vary by media query.
+  if (key !== 'theme-color') meta.set(key, tag.match(/content="([^"]*)"/)?.[1]);
+}
+const canonical = html.match(/rel="canonical" href="([^"]+)"/)[1];
+assert.equal(meta.get('og:url'), canonical);
+assert.equal(meta.get('twitter:url'), canonical);
+assert.equal(meta.get('og:site_name'), 'Yashraj Nayak');
+assert.equal(meta.get('twitter:card'), 'summary_large_image');
+assert.equal(meta.get('description'), meta.get('og:description'));
+assert.equal(meta.get('og:description'), meta.get('twitter:description'));
+assert.equal(meta.get('og:image'), meta.get('twitter:image'));
+assert(meta.get('og:image:alt'));
+assert(meta.get('twitter:image:alt'));
+const cardUrl = new URL(meta.get('og:image'));
+assert.equal(cardUrl.origin, new URL(canonical).origin);
+const card = readFileSync(`.${cardUrl.pathname}`);
+assert.equal(card.subarray(1,4).toString(), 'PNG');
+assert.equal(card.readUInt32BE(16), 1200);
+assert.equal(card.readUInt32BE(20), 630);
+assert.equal(meta.get('og:image:width'), '1200');
+assert.equal(meta.get('og:image:height'), '630');
+assert.equal(meta.get('og:image:type'), 'image/png');
+const schemas = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(m=>JSON.parse(m[1]));
+assert.equal(schemas.find(s=>s['@type']==='WebSite').url, canonical);
+assert(readFileSync('robots.txt','utf8').includes(`Sitemap: ${canonical}sitemap.xml`));
+assert(readFileSync('sitemap.xml','utf8').includes(`<loc>${canonical}</loc>`));
+console.log('Validated social metadata, 1200x630 card, structured data and sitemap consistency.');

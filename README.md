@@ -59,3 +59,9 @@ Run the build and validation commands above before committing. Push approved rel
 `.github/workflows/update-profile-readme.js` generates the companion GitHub profile README with current APJ student-programs, Bengaluru Tech Week and Codex work. It preserves the profile repository's `TOP-REPOS` markers and ranked repository section. The cross-repository workflow needs `PROFILE_REPO_TOKEN`; it skips the update if that credential is unavailable.
 
 The site README is maintained directly. Its legacy config-based generator leaves this atlas version unchanged.
+
+## Search and social previews
+
+`index.html` includes matching canonical, Open Graph and Twitter URLs, a site name, descriptive image alt text, and Person / WebSite structured data. Social previews use `assets/social/yashraj-nayak-card-2026.png`, a 1200 × 630 card in the site palette. The card can be rebuilt with Pillow using `python3 scripts/build-social-card.py --font path/to/licensed-font.ttf`.
+
+Keep `sitemap.xml`'s last modification date accurate when the page changes. `robots.txt` advertises that sitemap. `npm run check` validates metadata consistency and the PNG's actual dimensions. After changing a social image, give it a new filename to avoid stale platform caches.
