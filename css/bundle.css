@@ -1268,3 +1268,11 @@ figcaption {
 .profile-download p { font:10px/1.6 var(--mono); color:var(--muted); margin-top:10px; }
 .site-header nav a:not(:last-child) .link-icon { display:none; }
 @media (min-width:761px) { .map-nodes:has(.map-pin:nth-child(5)) { display:grid; grid-template-columns:1fr 1fr; gap:12px; align-content:center; } .map-nodes:has(.map-pin:nth-child(5)) .map-pin { position:static; } }
+
+/* Leave room for font descenders and the click particles without moving text. */
+.name-button canvas {
+  inset: -48px 0 auto;
+  height: calc(100% + 96px);
+}
+
+.name-button { user-select: none; -webkit-user-select: none; }
