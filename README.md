@@ -1,6 +1,6 @@
 # Yashraj Nayak — personal atlas
 
-A personal website about developer programs, communities and useful software. The redesign uses a deep plum typographic header matching the contact section, a warm paper palette, original contour artwork, a selectable project map, recent event photography and an optional particle wordmark.
+A personal website about developer programs, communities and useful software. The redesign uses a deep plum typographic header matching the contact section, a warm paper palette, original contour artwork, a selectable project map, recent event photography and an optional particle wordmark. On phones, the page leads directly into the work stories, with fewer repeated labels and compact tool rows. SVG link icons avoid platform-specific emoji rendering; the career timeline uses the original company logos.
 
 The public site is [yashrajnayak.com](https://yashrajnayak.com). GitHub Pages publishes the root of the `main` branch to this custom domain.
 

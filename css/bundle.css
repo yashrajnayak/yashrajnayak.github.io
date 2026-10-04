@@ -1234,3 +1234,32 @@ figcaption {
   .atlas-inner { padding-block: 30px; }
   .map-card-copy { padding: 20px 4px 8px; }
 }
+
+/* Drawn arrows avoid platform-dependent emoji rendering. */
+.link-icon { display: inline-block; width: 18px; height: 18px; flex: 0 0 18px; vertical-align: middle; }
+.link-icon-down { transform: rotate(90deg); }
+.tool-row > .link-icon { justify-self: end; margin-top: 5px; }
+.career-row { align-items: center; }
+.company-logo { display: flex; align-items: center; min-height: 30px; }
+.company-logo img { mix-blend-mode: multiply; width: auto; max-width: 132px; height: auto; max-height: 30px; object-fit: contain; object-position: left center; }
+@media (max-width: 760px) {
+  /* The stories already cover these projects; omit the repeated atlas on phones. */
+  .atlas { display: none; }
+  .hero-intro .current { font-size: 12px; line-height: 1.7; }
+  .hero-intro.wrap { gap: 16px; padding-block: 26px; }
+  .section-label > p, .tool-row .eyebrow, .tool-number { display: none; }
+  .section-label { margin-bottom: 22px; }
+  .section, .section-grid { padding-block: 40px; }
+  .tools-section { padding-block: 0; }
+  .section-title { font-size: 30px; margin-bottom: 28px; }
+  .tool-row { grid-template-columns: 1fr 20px; gap: 16px; padding-block: 20px; }
+  .tool-row p { margin-bottom: 0; }
+  .all-tools { margin-top: 22px; }
+  .about-copy { margin-top: 14px; }
+  .career { margin-top: 26px; }
+  .career-row { grid-template-columns: 88px 1fr; gap: 6px 16px; padding-block: 16px; }
+  .career-row > span { font-size: 9px; }
+  .company-logo { min-height: 28px; }
+  .company-logo img { max-width: 122px; max-height: 27px; }
+  .story-side p:not(.large-copy) + p { display: none; }
+}
