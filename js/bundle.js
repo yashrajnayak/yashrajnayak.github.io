@@ -37,10 +37,20 @@ const baselineProbe = document.createElement("span");
 baselineProbe.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
 baselineProbe.setAttribute("aria-hidden", "true");
 wordmark.append(baselineProbe);
+const titleLetters = Array.from(wordmark.firstChild.textContent, (letter) => {
+  const span = document.createElement("span");
+  span.textContent = letter;
+  span.className = "title-letter";
+  return span;
+});
+wordmark.firstChild.replaceWith(...titleLetters);
+let hoveredLetter = null;
 const hoverPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 function stopParticles() {
   cancelAnimationFrame(frame);
   titleMode = "idle";
+  hoveredLetter?.classList.remove("hovered-letter");
+  hoveredLetter = null;
   nameButton.classList.remove("playing");
   canvas.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -100,12 +110,20 @@ nameButton.addEventListener("click", () => {
   }
   frame = requestAnimationFrame(draw);
 });
-nameButton.addEventListener("pointerenter", () => {
+nameButton.addEventListener("pointermove", (event) => {
   if (reduceMotion.matches || !hoverPointer.matches || titleMode === "click") return;
+  const letter = event.target.closest(".title-letter");
+  if (letter === hoveredLetter) return;
   stopParticles();
+  if (!letter || !letter.textContent.trim()) return;
   const title = prepareTitle();
   if (!title) return;
-  const { context, rect, x, baseline, label } = title;
+  const { context, rect, baseline } = title;
+  const letterRect = letter.getBoundingClientRect();
+  const x = letterRect.left - rect.left;
+  const label = letter.textContent;
+  context.clearRect(0, 0, rect.width, rect.height);
+  context.fillText(label, x, baseline);
   // Sample points on the actual glyph contours, retaining the site's font.
   const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
   const sx = canvas.width / rect.width;
@@ -127,7 +145,8 @@ nameButton.addEventListener("pointerenter", () => {
     }
   }
   titleMode = "hover";
-  nameButton.classList.add("playing");
+  hoveredLetter = letter;
+  letter.classList.add("hovered-letter");
   const start = performance.now();
   function drawHover(now) {
     const progress = Math.min((now - start) / 900, 1);
@@ -137,7 +156,7 @@ nameButton.addEventListener("pointerenter", () => {
     context.globalAlpha = 1 - Math.min(progress * 3, 1);
     context.fillText(label, x, baseline);
     for (const point of points) {
-      const phase = Math.max(0, Math.min((progress - point.x / rect.width * 0.45) * 3, 1));
+      const phase = Math.max(0, Math.min((progress - (point.x - x) / letterRect.width * 0.45) * 3, 1));
       context.globalAlpha = phase;
       context.beginPath();
       context.arc(point.x, point.y, 1.4 + Math.sin(phase * Math.PI) * 2, 0, Math.PI * 2);
