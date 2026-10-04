@@ -107,10 +107,12 @@ const revised = html.replace(
 );
 save("index.html", revised);
 const manifest = JSON.parse(readFileSync("site.webmanifest", "utf8"));
-manifest.description =
-  "Developer programs, communities and tools by Yashraj Nayak";
-manifest.background_color = "#f2efeb";
-manifest.theme_color = "#28191e";
+const config = JSON.parse(readFileSync('config.json','utf8'));
+manifest.name = config.site.name;
+manifest.short_name = config.site.name;
+manifest.description = config.site.description;
+manifest.background_color = config.site.paper;
+manifest.theme_color = config.site.theme;
 manifest.icons = [192, 512].map((size) => ({
   src: `assets/favicons/favicon-${size}x${size}.png?v=${version}`,
   sizes: `${size}x${size}`,

@@ -1,92 +1,53 @@
-name: Update Profile README from Config
-
+name: Sync profile README
 on:
-  push:
+  workflow_run:
+    workflows: ['Deploy website']
+    types: [completed]
     branches: [main]
-    paths: ['config.json']
   workflow_dispatch:
-
+permissions:
+  contents: read
+concurrency:
+  group: profile-readme-sync
+  cancel-in-progress: false
 jobs:
-  update-profile-readme:
+  sync:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    
     steps:
-      - name: Checkout current repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Validate config.json
-        run: |
-          echo "🔍 Validating config.json..."
-          if [ ! -f "config.json" ]; then
-            echo "❌ config.json not found"
-            exit 1
-          fi
-          
-          if ! jq empty config.json 2>/dev/null; then
-            echo "❌ config.json is not valid JSON"
-            exit 1
-          fi
-          
-          echo "✅ config.json is valid"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+          ref: main
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
-
-      - name: Check profile repository token
-        id: profile-token
+          node-version: '24'
+      - name: Require profile write credential
         env:
           GH_TOKEN: ${{ secrets.PROFILE_REPO_TOKEN }}
         run: |
           if [ -z "$GH_TOKEN" ]; then
-            echo "::warning::PROFILE_REPO_TOKEN is not configured. Skipping profile README update."
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            exit 0
+            echo '::error::Configure PROFILE_REPO_TOKEN with Contents write access to the profile repository.'
+            exit 1
           fi
-
-          if gh api repos/yashrajnayak/yashrajnayak >/dev/null 2>&1; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "::warning::PROFILE_REPO_TOKEN is invalid or cannot access yashrajnayak/yashrajnayak. Skipping profile README update."
-            echo "available=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Checkout profile repository
-        if: steps.profile-token.outputs.available == 'true'
-        uses: actions/checkout@v4
+      - name: Read profile destination
+        id: config
+        run: node -e "console.log('repository=' + require('./config.json').profile.repository)" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
         with:
-          repository: yashrajnayak/yashrajnayak
+          repository: ${{ steps.config.outputs.repository }}
           token: ${{ secrets.PROFILE_REPO_TOKEN }}
           path: profile-repo
-
-      - name: Generate Profile README
-        if: steps.profile-token.outputs.available == 'true'
+      - name: Generate from website content
+        run: node .github/workflows/update-profile-readme.js
+      - name: Publish changed profile README
+        working-directory: profile-repo
         run: |
-          echo "🚀 Generating Profile README from config.json..."
-          node .github/workflows/update-profile-readme.js
-
-      - name: Check for changes in profile repo
-        if: steps.profile-token.outputs.available == 'true'
-        id: verify-changed-files
-        run: |
-          cd profile-repo
-          if git diff --quiet; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
+          if git diff --quiet -- README.md; then
+            echo 'Profile already matches website content.'
+            exit 0
           fi
-
-      - name: Commit and push changes to profile repository
-        if: steps.profile-token.outputs.available == 'true' && steps.verify-changed-files.outputs.changed == 'true'
-        run: |
-          cd profile-repo
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add README.md
-          git commit -m "🤖 Auto-update README.md from portfolio config.json"
+          git commit -m 'Sync profile README from website content'
           git push

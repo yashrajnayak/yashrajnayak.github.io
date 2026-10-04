@@ -1,67 +1,75 @@
 # Yashraj Nayak — personal atlas
 
-A personal website about developer programs, communities and useful software. The redesign uses a deep plum typographic header matching the contact section, a warm paper palette, original contour artwork, a selectable project map, recent event photography and an optional particle wordmark. On phones, the page leads directly into the work stories, with fewer repeated labels and compact tool rows. SVG link icons avoid platform-specific emoji rendering; the career timeline uses the original company logos.
+[Live website](https://yashrajnayak.com/) · [GitHub profile](https://github.com/yashrajnayak)
 
-The public site is [yashrajnayak.com](https://yashrajnayak.com). GitHub Pages publishes the root of the `main` branch to this custom domain.
+A personal website about developer programs, communities and useful software. It uses a plum and paper palette, original contour artwork, a desktop project map, a compact mobile layout, company logos, one native highlights video and a YN monogram favicon.
 
-## Develop
+## Edit content in one place
 
-Requires Node.js for asset bundling and Python 3 for the example preview server.
+**`config.json` is the source of truth** for the website and profile README. Text, links, media, career entries, project lists, navigation, SEO settings and interface labels live there. `scripts/render-site.mjs` contains layout and rendering logic; `index.html` and `generated/profile-README.md` are generated outputs.
+
+| Update | Configuration |
+| --- | --- |
+| Name, SEO, social card metadata | `site` |
+| Intro and current roles | `hero` |
+| Desktop project selector | `atlas.items` |
+| Work stories, photos and video | `work.stories` |
+| Shared website / README projects | `tools.projects` |
+| About and company timeline | `about` |
+| Contact and social links | `contact`, `footer` |
+| LinkedIn PDF download | `download` |
+| Profile headings and certifications | `profile` |
+| Buttons and accessibility labels | `ui` |
+
+Add a project by appending `{ "name", "description", "url", "tags" }` to `tools.projects`. Both the website and profile README will use the same name, description, link and order. Add stories and career entries to their arrays without editing HTML. A work story uses a `standard` or `split` layout and `image` or `video` media. Keep a maximum of one highlights video.
+
+The page is rendered at build time, so visitors and search crawlers receive complete content immediately. There is no content fetch, loading screen or dependency on JavaScript for essential content. JavaScript only enhances the project selector, wordmark and video controls.
+
+## Develop and validate
+
+Node.js 24 is used in CI. There are no runtime npm dependencies or React components.
 
 ```sh
+npm run sync:favicons
 npm run build
 npm run check
-npm run sync:favicons:check
+npm test
 python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
-Open `http://127.0.0.1:8765`. Edit `index.html` for content, `css/atlas.css` for presentation and `js/atlas.js` for optional interactions. Rebuild and reload after edits. The site has no React runtime or package dependencies.
+Open `http://127.0.0.1:8765`. Rebuild after editing configuration or styles. To produce the deployable folder, run `npm run build -- --output _site`.
 
-## Architecture
+Validation covers local assets, fragments, image dimensions, social metadata, the single-video rule, PDF validity, safe URLs and generated bundle consistency. Renderer tests exercise adding projects, stories and career entries, escaping text, invalid configuration, optional downloads and website/profile parity. Browser checks cover mobile and desktop layouts and interactive controls.
+
+## Deployment and profile synchronization
 
 ```mermaid
 flowchart LR
-  HTML[Static index.html] --> Browser[Browser]
-  CSS[fonts.css + atlas.css] --> Build[build-assets.mjs]
-  JS[atlas.js] --> Build
-  Build --> Bundles[CSS and JS bundles]
-  Bundles --> Browser
-  Photos[Local photos + native video] --> Browser
-  Generator[YN monogram generator] --> Favicon[Favicon build]
-  Favicon --> Icons[Local favicon assets]
-  Icons --> Browser
+  Config[config.json] --> Render[Static renderer]
+  Media[Local images and PDF] --> Build[Build and validation]
+  Render --> HTML[Complete website HTML]
+  Render --> Profile[Generated profile README]
+  HTML --> Build
+  Build --> Pages[GitHub Pages deployment]
+  Pages --> Sync[Successful deploy triggers profile sync]
+  Config --> Sync
+  Sync --> ProfileRepo[GitHub profile repository README]
 ```
 
-All essential content and links are in HTML. JavaScript enhances the project selector, name animation and native video controls. The animation stops when the page becomes hidden and respects reduced motion. No GitHub API request or LinkedIn image hotlink is needed to render the homepage.
+The protected `main` branch requires a pull request and the `validate-site` check. `Deploy website` builds and validates the configuration, then publishes `_site` through GitHub Pages. `CNAME` preserves the custom domain.
 
-Legacy section-manager sources and historical content configuration remain in the repository as reference; they are not included in the current page bundles. The active content source is `index.html`.
+After a successful deployment, `Sync profile README` runs automatically. It generates the profile from the website configuration and commits only when the content differs. It can also run manually. `PROFILE_REPO_TOKEN` must have Contents write access to the repository named in `profile.repository`; missing credentials fail clearly instead of silently skipping. No star-ranking automation should write to that README.
 
-## Images and fonts
+## LinkedIn PDF
 
-- Photos are stored in `assets/photos/`. `sources.json` records publisher, public source, observed context and delivered resolution. Source records are maintained with the assets; there is no public credits page.
-- The Codex group image is an unchanged 3840 × 2560 original from the existing photo archive. Other photos are LinkedIn-delivered derivatives.
-- `assets/video/` contains the exact Bengaluru Tech Week highlights, downloaded through the owning channel’s YouTube Studio controls at 720p. The video appears once, in the Bengaluru Tech Week story; the project selector uses a still photograph. A native player provides playback without YouTube overlays; `source.json` records provenance.
-- `assets/atlas-contours.svg` is original abstract contour artwork, not real geographic data.
-- Manrope is self-hosted under the SIL Open Font License, included in `assets/fonts/OFL.txt`.
+`assets/downloads/yashraj-nayak-profile.pdf` is the official LinkedIn export. The website shows its snapshot date beside the download link. To refresh it, use LinkedIn's desktop **Resources → Save to PDF**, replace this file, update `download.date`, then release. It is a snapshot and does not update itself when LinkedIn changes. Set `download.enabled` to `false` to hide the download.
 
-## Favicon automation
+## Media, favicon and search
 
-`scripts/sync-favicons.mjs` generates a geometric YN monogram in SVG, PNG and ICO formats without network access or a portrait. The workflow runs on demand and when the generator changes. Cache-busting URLs are updated deterministically.
+- `assets/photos/sources.json` and `assets/video/source.json` retain source records. The Codex photograph is an unchanged 3840 × 2560 original; the native highlights video is 720p. The video appears only once.
+- Company logos are in `assets/logos/`. Manrope is self-hosted with its SIL Open Font License in `assets/fonts/OFL.txt`.
+- `scripts/sync-favicons.mjs` generates deterministic YN monogram assets without fetching a portrait.
+- The 1200 × 630 social card is `assets/social/yashraj-nayak-card-2026.png`. Rebuild with Pillow using `python3 scripts/build-social-card.py --font path/to/licensed-font.ttf`. Its copy comes from configuration. Use a new asset filename after a visual change to avoid stale social caches.
+- Canonical URLs, Open Graph / Twitter metadata, Person / WebSite structured data, robots and sitemap are generated from configuration. Keep `site.updated` accurate when making substantive changes.
 
-## Validation and release
-
-`npm run check` verifies local asset references, fragment destinations, metadata, image attributes, photo credit records and regenerated bundle consistency. Browser checks should cover phone, tablet and desktop widths, keyboard selection, native video playback and pause controls, the name effect and console errors. A static check is not a full accessibility or performance audit.
-
-Run the build and validation commands above before committing. Push approved releases to `main`, then verify the GitHub Pages build and the live domain. `CNAME` preserves the custom domain.
-
-## Profile README
-
-`.github/workflows/update-profile-readme.js` generates the companion GitHub profile README with current APJ student-programs, Bengaluru Tech Week and Codex work. It preserves the profile repository's `TOP-REPOS` markers and ranked repository section. The cross-repository workflow needs `PROFILE_REPO_TOKEN`; it skips the update if that credential is unavailable.
-
-The site README is maintained directly. Its legacy config-based generator leaves this atlas version unchanged.
-
-## Search and social previews
-
-`index.html` includes matching canonical, Open Graph and Twitter URLs, a site name, descriptive image alt text, and Person / WebSite structured data. Social previews use `assets/social/yashraj-nayak-card-2026.png`, a 1200 × 630 card in the site palette. The card can be rebuilt with Pillow using `python3 scripts/build-social-card.py --font path/to/licensed-font.ttf`.
-
-Keep `sitemap.xml`'s last modification date accurate when the page changes. `robots.txt` advertises that sitemap. `npm run check` validates metadata consistency and the PNG's actual dimensions. After changing a social image, give it a new filename to avoid stale platform caches.
+`legacy/config.json` and the older section-manager files are historical reference, not active content sources. The deployed website does not load them.

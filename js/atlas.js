@@ -1,42 +1,7 @@
 /* The page is complete HTML. These enhancements are optional. */
-const projects = {
-  btw: {
-    category: "01 / COMMUNITY",
-    title: "One city. Many communities.",
-    description:
-      "Helping bring Bengaluru’s builders together through a week of independently hosted events.",
-    image: "assets/photos/aarambha-2026.jpg",
-    alt: "Audience listening at Aarambha, Bengaluru Tech Week",
-    link: "#bengaluru-tech-week",
-  },
-  education: {
-    category: "02 / EDUCATION",
-    title: "Learning by building.",
-    description:
-      "Student programs, campus communities, and hands-on experiences with data and AI.",
-    image: "assets/photos/ai-conference-2026.jpg",
-    alt: "A conversation at the Databricks booth at The AI Conference",
-    link: "#developer-education",
-  },
-  codex: {
-    category: "03 / BUILDING TOGETHER",
-    title: "From curiosity to a working idea.",
-    description:
-      "Codex meetups and hackathons in Bengaluru, and a growing community of people building with AI.",
-    image: "assets/photos/codex-ambassadors-2026-original.jpg",
-    alt: "Group photograph shared with Yashraj’s OpenAI Dev Day post",
-    link: "#codex-community",
-  },
-  tools: {
-    category: "04 / SOFTWARE",
-    title: "Small tools. Real problems.",
-    description:
-      "A portfolio starter, a way to explore developer connections, and tools for running community events.",
-    image: "assets/projects/GitTogethers_Registration_Web_Platform.png",
-    alt: "GitTogethers registration platform interface",
-    link: "#tools",
-  },
-};
+const siteData = JSON.parse(document.getElementById("site-data").textContent);
+const projects = siteData.projects;
+const ui = siteData.ui;
 const pins = [...document.querySelectorAll("[data-project]")];
 pins.forEach((pin) => {
   pin.disabled = false;
@@ -138,11 +103,12 @@ const playButton = document.querySelector('[data-film-action="play"]');
 const soundButton = document.querySelector('[data-film-action="sound"]');
 const visibleFilms = new Set();
 const manuallyPaused = new WeakSet();
+if (mainFilm) {
 filmControls.hidden = false;
 mainFilm.controls = false;
 function syncVideoControls() {
-  playButton.textContent = mainFilm.paused ? "Play film" : "Pause film";
-  soundButton.textContent = mainFilm.muted ? "Sound on" : "Sound off";
+  playButton.textContent = mainFilm.paused ? ui.play : ui.pause;
+  soundButton.textContent = mainFilm.muted ? ui.soundOn : ui.soundOff;
 
 }
 function toggleFilm(film) {
@@ -205,3 +171,5 @@ document.addEventListener("visibilitychange", () => {
   });
 });
 syncVideoControls();
+
+}
