@@ -37,6 +37,30 @@
       "source": "Previously retrieved Codex Ambassadors photo archive: 00003573-PHOTO-2026-09-28-23-15-15.jpg",
       "context": "Higher-resolution original group photograph from the same gathering; copied unchanged, no generated facial detail.",
       "dimensions": "3840x2560"
+    },
+    {
+      "file": "codex-ambassadors-2026-480.jpg",
+      "derivedFrom": "codex-ambassadors-2026-original.jpg",
+      "context": "Proportional downsample of the preserved original; no crop or generated detail. JPEG quality 85, progressive, Pillow Lanczos.",
+      "dimensions": "480x320"
+    },
+    {
+      "file": "codex-ambassadors-2026-960.jpg",
+      "derivedFrom": "codex-ambassadors-2026-original.jpg",
+      "context": "Proportional downsample of the preserved original; no crop or generated detail. JPEG quality 85, progressive, Pillow Lanczos.",
+      "dimensions": "960x640"
+    },
+    {
+      "file": "codex-ambassadors-2026-1600.jpg",
+      "derivedFrom": "codex-ambassadors-2026-original.jpg",
+      "context": "Proportional downsample of the preserved original; no crop or generated detail. JPEG quality 85, progressive, Pillow Lanczos.",
+      "dimensions": "1600x1067"
+    },
+    {
+      "file": "codex-ambassadors-2026-2400.jpg",
+      "derivedFrom": "codex-ambassadors-2026-original.jpg",
+      "context": "Proportional downsample of the preserved original; no crop or generated detail. JPEG quality 85, progressive, Pillow Lanczos.",
+      "dimensions": "2400x1600"
     }
   ]
 }

@@ -39,3 +39,21 @@ test('generation stays deterministic and mirrors every website project',()=>{
  const md=renderProfile(source);
  for(const p of source.tools.projects) {assert(md.includes(p.name));assert(md.includes(p.description));assert(md.includes(p.url));}
 });
+
+test('responsive story and atlas candidates are emitted with safe fallback images',()=>{
+ const html=renderSite(source);
+ assert(html.includes('codex-ambassadors-2026-480.jpg 480w'));
+ assert(html.includes('codex-ambassadors-2026-2400.jpg 2400w'));
+ assert(html.includes('sizes="(max-width: 760px)'));
+ assert(html.includes('preload="none"'));
+ for(const mutate of [m=>m.sources[0].src='javascript:bad',m=>m.sources[0].width=0,m=>m.sizes='',m=>m.sources[0].src='assets/missing.jpg']) {
+  const c=structuredClone(source);mutate(c.work.stories[2].media);assert.throws(()=>validateConfig(c));
+ }
+});
+test('optional mobile copy is explicit so added substantive paragraphs remain visible',()=>{
+ const c=structuredClone(source);c.work.stories[1].paragraphs.push('Substantive new detail');
+ const html=renderSite(c);
+ assert(html.includes('<p>Substantive new detail</p>'));
+ assert(html.includes('<p class="optional-copy">'));
+ assert(html.includes('Explore GitHub organization'));
+});
