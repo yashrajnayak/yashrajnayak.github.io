@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '24'
       - run: npm run sync:favicons && npm run build -- --output _site && npm run check && npm test
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
