@@ -7,7 +7,7 @@
     "description": "Yashraj Nayak builds developer programs, communities and useful tools. Student Programs (APJ) at Databricks, Bengaluru Tech Week co-founder and Codex Ambassador.",
     "locale": "en_IN",
     "language": "en",
-    "updated": "2026-10-03",
+    "updated": "2026-10-05",
     "monogram": "yn.",
     "theme": "#28191e",
     "paper": "#f2efeb",
@@ -114,11 +114,22 @@
         "category": "03 / BUILDING TOGETHER",
         "title": "From curiosity to a working idea.",
         "description": "Codex meetups and hackathons in Bengaluru, and a growing community of people building with AI.",
-        "image": "assets/photos/codex-ambassadors-2026-original.jpg",
+        "image": "assets/photos/codex-ambassadors-2026-480.jpg",
         "alt": "Group photograph shared with Yashraj’s OpenAI Dev Day post",
         "link": "#codex-community",
         "id": "codex",
-        "label": "Codex community"
+        "label": "Codex community",
+        "sources": [
+          {
+            "src": "assets/photos/codex-ambassadors-2026-480.jpg",
+            "width": 480
+          },
+          {
+            "src": "assets/photos/codex-ambassadors-2026-960.jpg",
+            "width": 960
+          }
+        ],
+        "sizes": "(max-width: 1150px) 284px, (min-width: 1700px) 364px, 324px"
       },
       {
         "category": "04 / SOFTWARE",
@@ -162,7 +173,7 @@
         },
         "caption": "Bengaluru Tech Week / 2026 / 00:25",
         "paragraphs": [
-          "A citywide week of independently hosted events. Working with a community of hosts, I helped bring different corners of Bengaluru’s tech ecosystem into one shared program."
+          "As co-founder and co-director of Bengaluru Tech Week, I worked with a community of hosts to bring independently hosted events into one shared citywide program."
         ],
         "link": {
           "label": "Meet the community",
@@ -183,14 +194,17 @@
         },
         "caption": "The AI Conference / San Francisco, 2026",
         "paragraphs": [
-          "Connecting students with the possibilities of data and AI.",
-          "I work on student programs across APJ at Databricks. Earlier this year, I helped build and run Bharat Bricks Hacks across five campuses in India.",
+          "Student programs across APJ at Databricks.",
+          "Earlier this year, I helped build and run Bharat Bricks Hacks across five campuses in India, connecting students with hands-on experiences in data and AI.",
           "What stays with me is the process: a rough idea, a team working through the hard parts, and a prototype they can finally show."
         ],
         "link": {
           "label": "Explore Bharat Bricks",
           "url": "https://bharatbricks.org/"
-        }
+        },
+        "optionalParagraphs": [
+          2
+        ]
       },
       {
         "id": "codex-community",
@@ -199,10 +213,29 @@
         "layout": "standard",
         "media": {
           "type": "image",
-          "src": "assets/photos/codex-ambassadors-2026-original.jpg",
+          "src": "assets/photos/codex-ambassadors-2026-960.jpg",
           "alt": "Group photograph shared by Yashraj with his OpenAI Dev Day post",
           "width": "3840",
-          "height": "2560"
+          "height": "2560",
+          "sources": [
+            {
+              "src": "assets/photos/codex-ambassadors-2026-480.jpg",
+              "width": 480
+            },
+            {
+              "src": "assets/photos/codex-ambassadors-2026-960.jpg",
+              "width": 960
+            },
+            {
+              "src": "assets/photos/codex-ambassadors-2026-1600.jpg",
+              "width": 1600
+            },
+            {
+              "src": "assets/photos/codex-ambassadors-2026-2400.jpg",
+              "width": 2400
+            }
+          ],
+          "sizes": "(max-width: 760px) calc(100vw - 40px), (max-width: 1150px) calc(100vw - 274px), (max-width: 1560px) calc(100vw - 415px), 1145px"
         },
         "caption": "From Bengaluru meetups to San Francisco / 2026",
         "paragraphs": [
@@ -229,19 +262,22 @@
         "name": "Developer Portfolio",
         "description": "A configurable starting point for a personal website.",
         "tags": "HTML / JAVASCRIPT / GITHUB PAGES",
-        "url": "https://github.com/yashrajnayak/developer-portfolio"
+        "url": "https://github.com/yashrajnayak/developer-portfolio",
+        "action": "View source"
       },
       {
         "name": "Connecticut",
         "description": "Explore the connections between people on GitHub.",
         "tags": "COMMUNITY / GITHUB API / VISUALISATION",
-        "url": "https://github.com/yashrajnayak/connecticut"
+        "url": "https://github.com/yashrajnayak/connecticut",
+        "action": "View source"
       },
       {
         "name": "GitTogethers",
         "description": "Registration and check-in for developer gatherings.",
         "tags": "EVENTS / JAVASCRIPT / AUTOMATION",
-        "url": "https://gittogethers.github.io/"
+        "url": "https://github.com/gittogethers",
+        "action": "Explore GitHub organization"
       }
     ],
     "more": {
@@ -346,7 +382,7 @@
       "I’d be glad to compare notes."
     ],
     "link": {
-      "label": "Say hello",
+      "label": "Connect on LinkedIn",
       "url": "https://www.linkedin.com/in/yashrajnayak/"
     }
   },

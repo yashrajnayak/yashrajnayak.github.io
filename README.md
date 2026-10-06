@@ -21,13 +21,13 @@ A personal website about developer programs, communities and useful software. It
 | Profile headings and certifications | `profile` |
 | Buttons and accessibility labels | `ui` |
 
-Add a project by appending `{ "name", "description", "url", "tags" }` to `tools.projects`. Both the website and profile README will use the same name, description, link and order. Add stories and career entries to their arrays without editing HTML. A work story uses a `standard` or `split` layout and `image` or `video` media. Keep a maximum of one highlights video.
+Add a project by appending `{ "name", "description", "url", "tags", "action" }` to `tools.projects`. Both the website and profile README will use the same name, description, link and order. Add stories and career entries to their arrays without editing HTML. A work story uses a `standard` or `split` layout and `image` or `video` media. Keep a maximum of one highlights video.
 
 The page is rendered at build time, so visitors and search crawlers receive complete content immediately. There is no content fetch, loading screen or dependency on JavaScript for essential content. JavaScript only enhances the project selector, wordmark and video controls.
 
 ## Develop and validate
 
-Node.js 24 is used in CI. There are no runtime npm dependencies or React components.
+Use Node.js 24, matching CI, including when reproducing favicon bytes. There are no runtime npm dependencies or React components.
 
 ```sh
 npm run sync:favicons
@@ -44,21 +44,21 @@ Validation covers local assets, fragments, image dimensions, social metadata, th
 ## Deployment and profile synchronization
 
 ```mermaid
-flowchart LR
+flowchart TD
   Config[config.json] --> Render[Static renderer]
   Media[Local images and PDF] --> Build[Build and validation]
   Render --> HTML[Complete website HTML]
   Render --> Profile[Generated profile README]
   HTML --> Build
   Build --> Pages[GitHub Pages deployment]
-  Pages --> Sync[Successful deploy triggers profile sync]
-  Config --> Sync
+  Pages --> Revision[Latest successful main deployment SHA]
+  Revision --> Sync[Render profile from deployed config]
   Sync --> ProfileRepo[GitHub profile repository README]
 ```
 
 The protected `main` branch requires a pull request and the `validate-site` check. `Deploy website` builds and validates the configuration, then publishes `_site` through GitHub Pages. `CNAME` preserves the custom domain.
 
-After a successful deployment, `Sync profile README` runs automatically. It generates the profile from the website configuration and commits only when the content differs. It can also run manually. `PROFILE_REPO_TOKEN` must have Contents write access to the repository named in `profile.repository`; missing credentials fail clearly instead of silently skipping. No star-ranking automation should write to that README.
+After a successful deployment, `Sync profile README` runs automatically. Automatic runs check out the successful deployment’s `head_sha`, rather than a moving `main`. Manual runs select the latest successful main deployment too. Older or out-of-order events are skipped, and a second deployment check before publishing prevents an obsolete render from overwriting a newer deployment. The profile commits only when its content differs. `PROFILE_REPO_TOKEN` must have Contents write access to the repository named in `profile.repository`; missing credentials fail clearly instead of silently skipping. No star-ranking automation should write to that README.
 
 ## LinkedIn PDF
 
@@ -66,7 +66,7 @@ After a successful deployment, `Sync profile README` runs automatically. It gene
 
 ## Media, favicon and search
 
-- `assets/photos/sources.json` and `assets/video/source.json` retain source records. The Codex photograph is an unchanged 3840 × 2560 original; the native highlights video is 720p. The video appears only once.
+- `assets/photos/sources.json` and `assets/video/source.json` retain source records. The Codex photograph retains its unchanged 3840 × 2560 original; proportional JPEG derivatives at 480, 960, 1600 and 2400 pixels serve responsive story and atlas images. `media.sources` / atlas `sources` contain `{src, width}` candidates with a `sizes` value; the native highlights video is 720p. The video appears only once and uses `preload="none"`. Phones, reduced-motion preferences, Save-Data and reported slow connections require an explicit play action. Desktop ambient playback keeps its pause control.
 - Company logos are in `assets/logos/`. Manrope is self-hosted with its SIL Open Font License in `assets/fonts/OFL.txt`.
 - `scripts/sync-favicons.mjs` generates deterministic YN monogram assets without fetching a portrait.
 - The 1200 × 630 social card is `assets/social/yashraj-nayak-card-2026.png`. Rebuild with Pillow using `python3 scripts/build-social-card.py --font path/to/licensed-font.ttf`. Its copy comes from configuration. Use a new asset filename after a visual change to avoid stale social caches.

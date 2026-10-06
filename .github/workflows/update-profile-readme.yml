@@ -7,6 +7,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: profile-readme-sync
   cancel-in-progress: false
@@ -17,11 +18,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.sha }}
+      - name: Resolve successfully deployed revision
+        id: deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {resolveDeployment} = await import(`${process.env.GITHUB_WORKSPACE}/scripts/profile-deployment.mjs`);
+            await resolveDeployment({github, context, core});
+      - uses: actions/checkout@v4
+        if: steps.deployment.outputs.publish == 'true'
+        with:
+          ref: ${{ steps.deployment.outputs.sha }}
       - uses: actions/setup-node@v4
+        if: steps.deployment.outputs.publish == 'true'
         with:
           node-version: '24'
       - name: Require profile write credential
+        if: steps.deployment.outputs.publish == 'true'
         env:
           GH_TOKEN: ${{ secrets.PROFILE_REPO_TOKEN }}
         run: |
@@ -30,16 +44,32 @@ jobs:
             exit 1
           fi
       - name: Read profile destination
+        if: steps.deployment.outputs.publish == 'true'
         id: config
         run: node -e "console.log('repository=' + require('./config.json').profile.repository)" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
+        if: steps.deployment.outputs.publish == 'true'
         with:
           repository: ${{ steps.config.outputs.repository }}
           token: ${{ secrets.PROFILE_REPO_TOKEN }}
           path: profile-repo
       - name: Generate from website content
+        if: steps.deployment.outputs.publish == 'true'
         run: node .github/workflows/update-profile-readme.js
+      - name: Recheck deployment before publishing
+        id: guard
+        if: steps.deployment.outputs.publish == 'true'
+        uses: actions/github-script@v7
+        env:
+          DEPLOYED_SHA: ${{ steps.deployment.outputs.sha }}
+          DEPLOYED_RUN_ID: ${{ steps.deployment.outputs.run-id }}
+          DEPLOYED_ATTEMPT: ${{ steps.deployment.outputs.attempt }}
+        with:
+          script: |
+            const {resolveDeployment} = await import(`${process.env.GITHUB_WORKSPACE}/scripts/profile-deployment.mjs`);
+            await resolveDeployment({github, context, core}, {sha: process.env.DEPLOYED_SHA, runId: process.env.DEPLOYED_RUN_ID, attempt: process.env.DEPLOYED_ATTEMPT});
       - name: Publish changed profile README
+        if: steps.guard.outputs.publish == 'true'
         working-directory: profile-repo
         run: |
           if git diff --quiet -- README.md; then

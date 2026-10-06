@@ -14,6 +14,14 @@ pins.forEach((pin) =>
       button.setAttribute("aria-pressed", String(button === pin)),
     );
     const image = document.getElementById("map-image");
+    // Clear candidates when switching back to a project with only one image.
+    if (project.sources) {
+      image.sizes = project.sizes;
+      image.srcset = project.sources.map(source => `${source.src} ${source.width}w`).join(', ');
+    } else {
+      image.removeAttribute('srcset');
+      image.removeAttribute('sizes');
+    }
     image.src = project.image;
     image.alt = project.alt;
     document.getElementById("map-category").textContent = project.category;
@@ -26,8 +34,18 @@ pins.forEach((pin) =>
 
 const nameButton = document.querySelector(".name-button");
 const canvas = document.getElementById("name-particles");
-nameButton.disabled = false;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+function syncNameInteraction() {
+  nameButton.disabled = reduceMotion.matches;
+  if (reduceMotion.matches) {
+    nameButton.setAttribute('role', 'presentation');
+    nameButton.removeAttribute('aria-label');
+  } else {
+    nameButton.removeAttribute('role');
+    nameButton.setAttribute('aria-label', ui.animate);
+  }
+}
+syncNameInteraction();
 let frame = 0;
 let titleMode = "idle";
 const wordmark = nameButton.querySelector(".wordmark");
@@ -171,7 +189,7 @@ nameButton.addEventListener("pointerleave", () => {
   if (titleMode === "hover") stopParticles();
 });
 window.addEventListener("resize", stopParticles);
-reduceMotion.addEventListener("change", stopParticles);
+reduceMotion.addEventListener("change", () => { stopParticles(); syncNameInteraction(); });
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) stopParticles();
 });
@@ -183,6 +201,9 @@ const filmControls = document.querySelector(".film-controls");
 const playButton = document.querySelector('[data-film-action="play"]');
 const soundButton = document.querySelector('[data-film-action="sound"]');
 const visibleFilms = new Set();
+const mobileFilm = window.matchMedia('(max-width: 760px)');
+const connection = navigator.connection;
+const allowAmbientPlayback = () => !mobileFilm.matches && !connection?.saveData && !['slow-2g', '2g', '3g'].includes(connection?.effectiveType);
 const manuallyPaused = new WeakSet();
 if (mainFilm) {
 filmControls.hidden = false;
@@ -227,6 +248,7 @@ const observer = new IntersectionObserver(
       else if (
         !target.hidden &&
         !reduceMotion.matches &&
+      allowAmbientPlayback() &&
         !manuallyPaused.has(target) &&
         !document.hidden
       )
@@ -236,9 +258,10 @@ const observer = new IntersectionObserver(
   { threshold: 0.35 },
 );
 films.forEach((film) => observer.observe(film));
-reduceMotion.addEventListener("change", () => {
-  if (reduceMotion.matches) films.forEach((film) => film.pause());
-});
+const pauseForPreferences = () => { if (reduceMotion.matches || !allowAmbientPlayback()) films.forEach(film => film.pause()); };
+reduceMotion.addEventListener('change', pauseForPreferences);
+mobileFilm.addEventListener('change', pauseForPreferences);
+connection?.addEventListener('change', pauseForPreferences);
 document.addEventListener("visibilitychange", () => {
   films.forEach((film) => {
     if (document.hidden) film.pause();
@@ -246,6 +269,7 @@ document.addEventListener("visibilitychange", () => {
       visibleFilms.has(film) &&
       !film.hidden &&
       !reduceMotion.matches &&
+      allowAmbientPlayback() &&
       !manuallyPaused.has(film)
     )
       film.play().catch(syncVideoControls);

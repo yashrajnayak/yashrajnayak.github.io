@@ -4,6 +4,6 @@
     "sync:favicons": "node scripts/sync-favicons.mjs",
     "sync:favicons:check": "node scripts/sync-favicons.mjs --check",
     "check": "node scripts/check-site.mjs",
-    "test": "node --test scripts/render-site.test.mjs"
+    "test": "node --test scripts/*.test.mjs"
   }
 }
