@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+import { cssFiles, jsFiles, bundle } from "./asset-sources.mjs";
 const root = process.cwd();
 const config = JSON.parse(readFileSync("config.json", "utf8"));
 const pages = ["index.html"];
@@ -53,17 +54,10 @@ const person = JSON.parse(
 assert.equal(person.name, config.site.name);
 assert.equal(person.worksFor.name, config.person.worksFor.name);
 for (const [output, inputs] of [
-  ["css/bundle.css", ["css/fonts.css", "css/atlas.css"]],
-  ["js/bundle.js", ["js/atlas.js"]],
+  ["css/bundle.css", cssFiles],
+  ["js/bundle.js", jsFiles],
 ]) {
-  const expected =
-    inputs
-      .map(
-        (file) =>
-          (output.startsWith("css") ? `/* ${file} */\n` : "") +
-          readFileSync(file, "utf8").trim(),
-      )
-      .join("\n\n") + "\n";
+  const expected = bundle(inputs, output.startsWith("css"));
   assert.equal(
     readFileSync(output, "utf8"),
     expected,
