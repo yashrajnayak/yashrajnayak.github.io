@@ -23,11 +23,11 @@ A personal website about developer programs, communities and useful software. It
 
 Add a project by appending `{ "name", "description", "url", "tags", "action" }` to `tools.projects`. Both the website and profile README will use the same name, description, link and order. Add stories and career entries to their arrays without editing HTML. A work story uses a `standard` or `split` layout and `image` or `video` media. Keep a maximum of one highlights video.
 
-The page is rendered at build time, so visitors and search crawlers receive complete content immediately. There is no content fetch, loading screen or dependency on JavaScript for essential content. JavaScript only enhances the project selector, wordmark and video controls.
+The page is rendered at build time, so visitors and search crawlers receive complete content immediately. There is no content fetch, loading screen or dependency on JavaScript for essential content. JavaScript only enhances the project selector, wordmark, video controls and desktop wheel scrolling.
 
 ## Develop and validate
 
-Use Node.js 24, matching CI, including when reproducing favicon bytes. There are no runtime npm dependencies or React components.
+Use Node.js 24, matching CI, including when reproducing favicon bytes. No npm install step is required, and there are no React components.
 
 ```sh
 npm run sync:favicons
@@ -40,6 +40,10 @@ python3 -m http.server 8765 --bind 127.0.0.1
 Open `http://127.0.0.1:8765`. Rebuild after editing configuration or styles. To produce the deployable folder, run `npm run build -- --output _site`.
 
 Validation covers local assets, fragments, image dimensions, social metadata, the single-video rule, PDF validity, safe URLs and generated bundle consistency. Renderer tests exercise adding projects, stories and career entries, escaping text, invalid configuration, optional downloads and website/profile parity. Browser checks cover mobile and desktop layouts and interactive controls.
+
+Desktop wheel smoothing uses self-hosted Lenis 1.3.27 from `assets/vendor/lenis/1.3.27/`, with its MIT license and verified package provenance. `scripts/asset-sources.mjs` keeps the build and checker inputs aligned. The bundle omits the standalone upstream source-map reference; the vendored files stay unchanged.
+
+`js/smooth-scroll.js` enables smoothing only for a fine pointer with hover and no coarse pointer or reduced-motion preference. Preference changes and page lifecycle events destroy/recreate the instance. Keyboard, focus, touch, fragment links and history retain browser defaults and the existing CSS scroll padding. Native navigation clears pending wheel inertia; no custom anchor offsets, history handling or extra animation-frame driver is added. Lifecycle regression tests run with `npm test`.
 
 ## Deployment and profile synchronization
 

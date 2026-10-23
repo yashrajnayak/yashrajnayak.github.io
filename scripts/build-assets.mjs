@@ -1,18 +1,9 @@
 import {renderSite, renderProfile, escape} from "./render-site.mjs";
 import { readFileSync, writeFileSync, mkdirSync, cpSync } from "node:fs";
+import { cssFiles, jsFiles, bundle } from "./asset-sources.mjs";
 // Static HTML provides all essential content; bundles contain optional enhancements.
-const cssFiles = ["css/fonts.css", "css/atlas.css"];
-const jsFiles = ["js/atlas.js"];
-writeFileSync(
-  "css/bundle.css",
-  cssFiles
-    .map((file) => `/* ${file} */\n${readFileSync(file, "utf8").trim()}`)
-    .join("\n\n") + "\n",
-);
-writeFileSync(
-  "js/bundle.js",
-  jsFiles.map((file) => readFileSync(file, "utf8").trim()).join("\n\n") + "\n",
-);
+writeFileSync("css/bundle.css", bundle(cssFiles, true));
+writeFileSync("js/bundle.js", bundle(jsFiles));
 console.log("Built personal atlas styles and optional interactions.");
 
 const config = JSON.parse(readFileSync('config.json','utf8'));
