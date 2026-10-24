@@ -21,7 +21,7 @@ jobs:
           ref: ${{ github.sha }}
       - name: Resolve successfully deployed revision
         id: deployment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const {resolveDeployment} = await import(`${process.env.GITHUB_WORKSPACE}/scripts/profile-deployment.mjs`);
@@ -59,7 +59,7 @@ jobs:
       - name: Recheck deployment before publishing
         id: guard
         if: steps.deployment.outputs.publish == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           DEPLOYED_SHA: ${{ steps.deployment.outputs.sha }}
           DEPLOYED_RUN_ID: ${{ steps.deployment.outputs.run-id }}
